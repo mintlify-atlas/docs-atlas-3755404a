@@ -1,0 +1,93 @@
+---
+title: "Deck-Level Continuity Anchor: Locking a Confirmed Style"
+description: "How a single deck identity is extracted from confirmed style previews and used to prevent per-slide visual drift across the full presentation."
+---
+
+After a user confirms a style direction, the workflow does not move directly into generating slides. It first runs a short reverse-engineering pass — reading the actual confirmed preview images as evidence of what the chosen direction became in practice — and converts that reading into a deck-level continuity anchor. This anchor is the stable identity that every per-slide image prompt, page blueprint, and execution constraint must inherit for the rest of the project.
+
+## What the continuity anchor is
+
+The continuity anchor is not a long image prompt. It is a structured identity document — compact enough to be referenced per-slide but specific enough to prevent the most common failure mode: "same style, different mood" drift.
+
+Without an anchor, slides can subtly diverge. One slide might run dark, glossy, and high-contrast. The next might render bright, airy, and nearly flat. Both may technically match the original style description, but the resulting deck feels inconsistent — as if slides came from different template families.
+
+The anchor prevents this by locking at least eight properties at the deck level:
+
+| Property | What it locks |
+|----------|--------------|
+| Base brightness range and background tendency | Whether the deck lives in a bright, dark, or middle-key world, and the baseline mood of backgrounds across all slides |
+| Dominant palette and secondary palette roles | Which color is the base, which is structure, which is data highlight, and where accent color is reserved |
+| Lighting model and depth strength | Whether depth reads as soft glow, hard shadow, flat, or layered — and how consistently that applies |
+| Material language | The surface quality that defines the visual world: translucent panels, clean digital substrate, textured paper, and so on |
+| Container grammar and edge treatment | How information is framed: rounded panels, fine-line dividers, heavy HUD frames, or none of the above |
+| Decoration grammar | Which decorative elements are part of the system and which are not allowed |
+| Title, label, and emphasis tone | Whether typographic emphasis reads as precise and academic, bold and editorial, or warm and conversational |
+| Restraint vs. expressiveness level | The overall energy level of the visual system — how aggressively graphic elements compete with content |
+
+## When it is created
+
+The anchor is created after **风格反演确认** (style inversion confirmation) — the short reverse-engineering step that runs after the user confirms a style direction and before any planning files are written or final visuals are generated.
+
+<Note>
+The anchor is based on the selected preview images as primary evidence, with the original generation prompt as supporting context. If the actual images revealed stronger or more specific style facts than the original prompt described, the stronger reverse-engineered version takes precedence.
+</Note>
+
+## The style inversion confirmation process
+
+Before writing the anchor, the agent reads the confirmed 首页, 目录页, and 正文页 as evidence and produces a short structured judgment. This judgment separates extracted elements into three buckets:
+
+- **明确应延续的** — elements that clearly read as intentional and should carry into the full deck
+- **效果好但需要确认** — elements that worked well in the previews but should be confirmed before locking deck-wide
+- **只在当前图里偶然成立不建议锁死** — elements that happened to appear in one preview image but are not stable enough to become a global rule
+
+The user can confirm which items to preserve, leave local, or discard. If the user does not correct the judgment, the first bucket is kept and the second bucket is not automatically elevated to deck-wide constraints.
+
+Prefer concrete extracted elements over vague labels. For example:
+
+- "蓝白主调 + 金色点缀 + 学术答辩感应延续" is useful
+- "高级感应延续" is not
+
+## The allowed variation range
+
+The anchor defines a visual world, not a fixed template. Within that world, variation by page role is expected and encouraged:
+
+- the cover may be slightly more atmospheric
+- data-heavy body pages may deepen contrast slightly
+- structural pages like the TOC may be more grid-oriented
+
+What is not allowed is variation that exits the brightness world or changes the background mood. For example: if the anchor locks a bright, clean, research-led background mood, no slide in the deck should drift into a dark control-room aesthetic — unless that range was explicitly defined as part of the confirmed system.
+
+## Per-slide prompt inheritance
+
+Once the anchor exists, every per-slide image prompt inherits it first, then adds page-role-specific and content-specific variation on top. Slides are not independent prompt-writing tasks. The anchor is the invariant; page content and role are the variables.
+
+## Anchor format
+
+The recommended format is a short structured block, not a paragraph. This makes it easy to reference and paste into per-slide contexts.
+
+```md
+### deck-level continuity anchor
+- brightness_world: high-key bright scientific board
+- background_mood: bright, clean, research-led; do not drift into dark control-room mood
+- palette_roles: white/light-cyan base, deep-blue as structure color, cyan-blue as data highlight, warm accent only for sparse emphasis
+- lighting_depth: soft luminous depth, restrained glow, no heavy neon contrast
+- material_language: translucent research panels + clean diagram surfaces
+- container_grammar: rounded rectangular panels, fine-line dividers, light overlays, no heavy HUD frames
+- emphasis_tone: precise, academic, polished, readable
+- allowed_variation: cover may be slightly more atmospheric; data-heavy pages may deepen contrast slightly; full dark-background slides are not allowed
+```
+
+<Tip>
+If a feature was liked only in one preview page and was not confirmed as deck-wide, mark that scope explicitly rather than silently upgrading it into a global rule.
+</Tip>
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Style vectors" icon="sliders" href="/style-system/vectors">
+    The eight internal dimensions that define what can be locked and what can vary across slides.
+  </Card>
+  <Card title="Design spec artifact" icon="pencil-ruler" href="/artifacts/design-spec">
+    The planning file where the confirmed continuity anchor is recorded alongside the full deck rationale.
+  </Card>
+</CardGroup>

@@ -1,0 +1,71 @@
+---
+title: "Workflow overview: five stages, three confirmations"
+description: "See how PPT Image First moves from a rough brief to a finished deck through five sequential stages and three mandatory confirmation points."
+---
+
+PPT Image First is structured as a staged conversation, not a form. You provide a rough idea; the skill builds content depth, proposes real visual directions, locks a style, and only then generates the final slides. Every stage has a defined output, and three mandatory confirmation points prevent the workflow from moving forward until you have approved what matters. The result is a deck you have actually seen and confirmed at every critical decision — not one assembled from defaults behind the scenes.
+
+## The five stages
+
+<Steps>
+  <Step title="Stage 1 — Intake and baseline judgment">
+    You share the purpose, audience, rough length, any existing materials, and any concrete identity anchors such as your school, company, or laboratory. The skill outputs a short baseline judgment covering the deck goal, recommended type and page range, narrative spine, and usable identity anchors. The first confirmation point — **需求确认** — closes this stage.
+  </Step>
+  <Step title="Stage 1.25 — Content research">
+    After needs confirmation, the skill creates a pre-style content basis before any visual work begins. Depending on how much material you provide, this runs in either **整理但不扩写** mode (you already provided complete content) or **补强并报告化生成** mode (the skill builds a research-style report from thin or scattered material). You see a synthesized judgment, not the raw report, before moving on.
+  </Step>
+  <Step title="Stage 2 — Style proposals and preview">
+    A short style-boundary alignment covers three questions: color tone (bright / dark / middle), professional vs. stylized route, and how many directions to preview. Style vectors are applied internally to derive proposal cards. Each card comes with exactly three real generated preview images — **首页**, **目录页**, and **正文页** — displayed in the bundled `preview_shell/index.html`. The second confirmation point — **风格确认** — closes this stage.
+  </Step>
+  <Step title="Stage 2.75 — Style refinement and lock">
+    If you are not ready to confirm, refinement rounds let you pick a base direction and request adjustments. Before deriving variations, the skill runs a **风格反演确认** pass that reads the actual preview images as evidence — not just the original prompt — and extracts stable visual facts into three buckets. Once you confirm, those facts become the deck-level continuity anchor. Planning files (`design_spec.md`, `slide_blueprint.md`, `spec_lock.md`) are written only after this anchor is set. The third confirmation point — **生成前确认** — opens the generation stage.
+  </Step>
+  <Step title="Stages 3–5 — Generation, candidate selection, and review">
+    Final page visuals are generated as real images at **16:9** ratio. You choose between one image per slide (go straight to review) or multiple candidates per slide (select via the bundled `candidate_picker_shell/index.html` first). The bundled `review_shell/index.html` is the collaboration surface for retouch rounds. The workflow ends only after you explicitly approve the reviewed pages, at which point the final PPTX is exported and opened for you.
+  </Step>
+</Steps>
+
+## The three confirmation points
+
+Each confirmation point is a hard stop — the workflow does not advance until you respond.
+
+| Confirmation | Chinese label | What you are confirming |
+|---|---|---|
+| Point 1 | 需求确认 | Baseline judgment: deck goal, audience, page range, narrative spine |
+| Point 2 | 风格确认 | Style direction: which proposal (or mix) you want to carry forward |
+| Point 3 | 生成前确认 | Planning files: deck is ready to generate, content and style are locked |
+
+## Why the staged structure exists
+
+Jumping from a brief directly into generation almost always produces a deck that looks plausible but is off in ways that are hard to fix later — wrong emphasis, generic visuals, placeholder-driven structure. The staged structure solves three specific problems:
+
+- **Content before style.** The content research stage ensures that preview images draw from real arguments and section logic rather than decorative topic placeholders. The cover reflects your actual thesis; the TOC reflects your real narrative chain.
+- **Evidence before lock.** The style inversion confirmation step prevents the planning files from inheriting only the original prompt wording. It reads what the images actually became and extracts stable repeatable facts before committing them to the continuity anchor.
+- **Review before export.** The review-and-retouch loop keeps the final PPT from being exported until you have seen and approved the actual rendered pages.
+
+## Default ratio
+
+Unless you explicitly request another presentation format, all preview images and final page visuals are generated in **16:9** ratio. The image-generation path does not default to a generic art ratio such as 3:2.
+
+## Explore each stage
+
+<CardGroup cols={2}>
+  <Card title="Intake and confirmation" icon="clipboard-list" href="/workflow/intake-and-confirmation">
+    What to provide, what the baseline judgment covers, and how identity anchors work
+  </Card>
+  <Card title="Content research" icon="magnifying-glass" href="/workflow/content-research">
+    The content_report.md artifact, the two research modes, and style-boundary alignment
+  </Card>
+  <Card title="Style proposals and preview" icon="images" href="/workflow/style-proposals-and-preview">
+    Proposal cards, the fixed 3-page preview set, and the preview shell
+  </Card>
+  <Card title="Style refinement and lock" icon="sliders" href="/workflow/style-refinement-and-lock">
+    Refinement rounds, style inversion confirmation, and writing the planning files
+  </Card>
+  <Card title="Generation and review" icon="film" href="/workflow/generation-and-review">
+    Single vs. multi-candidate generation, the candidate picker, and the review shell
+  </Card>
+  <Card title="Planning artifacts" icon="file-lines" href="/artifacts/content-report">
+    The four output files — content report, design spec, slide blueprint, and spec lock
+  </Card>
+</CardGroup>

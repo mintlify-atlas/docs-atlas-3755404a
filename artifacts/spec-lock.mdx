@@ -1,0 +1,172 @@
+---
+title: 'Spec Lock: Execution Constraints for Generation'
+description: 'How spec_lock.md encodes machine-oriented constraints that generation must not drift from, distinct from the human-readable rationale in design_spec.md.'
+---
+
+`spec_lock.md` is the last of the three core planning files and the only one written for machines rather than humans. Where `design_spec.md` explains the _rationale_ behind design decisions using connected prose, `spec_lock.md` records only what generation must not drift from — in compressed, field-oriented form. Every constraint here is a direct constraint on the generation pass; nothing is included for context or explanation.
+
+## When it's written
+
+`spec_lock.md` is always written last, after both `design_spec.md` and `slide_blueprint.md` are complete.
+
+<Steps>
+  <Step title="design_spec.md complete">
+    The global rationale, continuity anchor, and constraints are documented in human-readable form.
+  </Step>
+  <Step title="slide_blueprint.md complete">
+    Every slide's claim status, continuity inheritance, and overlay decisions are defined.
+  </Step>
+  <Step title="spec_lock.md is written">
+    The execution constraints are extracted from both planning files and encoded in machine-oriented form. No rationale is duplicated here.
+  </Step>
+  <Step title="生成前确认 (pre-generation confirmation)">
+    The user confirms the pre-generation summary — which compresses the project overview, chosen style result, continuity anchor, and page structure — before generation begins.
+  </Step>
+</Steps>
+
+## All sections
+
+### canvas
+
+```md
+### canvas
+- format: [presentation format]
+- ratio: 16:9
+- hard_size_requirements: [any explicit size constraints from the user]
+```
+
+The ratio defaults to `16:9` unless the user explicitly requests another presentation ratio. Do not let the image-generation path default to a generic art ratio such as `3:2`.
+
+### visual_system
+
+The visual_system section locks the style direction and the deck-level continuity anchor in compressed, machine-oriented form. The following example is taken directly from the template:
+
+```md
+### visual_system
+- chosen_style_direction: atmospheric remote sensing blueprint
+- deck_level_continuity_anchor:
+  - brightness_world: high-key
+  - background_tendency: bright scientific board
+  - forbidden_brightness_jump: no full dark control-room pages
+  - lighting_model: soft luminous depth with restrained glow
+  - material_language: translucent research panel
+  - container_grammar: rounded light panels + fine-line data dividers
+  - decoration_grammar: contour lines, subtle grid, remote-sensing signal traces
+  - emphasis_tone: academic, precise, polished
+- cover_body_continuity_rules: same palette roles, same panel language, same signal-line decoration family
+- allowed_variation_range: cover can be more atmospheric; body pages can be denser; brightness must stay in the bright range
+```
+
+<Note>
+  This is the machine-oriented version of the continuity anchor from `design_spec.md`. It uses compressed field notation rather than prose. The content must match the design spec's anchor but the format is tighter and contains no explanation.
+</Note>
+
+The visual_system section must also record:
+- Reverse-engineered preview facts that are now hard constraints
+- User-confirmed deck-wide liked elements
+- Cover/body continuity rules
+- Allowed variation range
+- Fixed brightness range and background tendency
+
+### colors
+
+```md
+### colors
+- [color_role]: [color description or value]
+- dominant: [dominant color]
+- supporting: [supporting color(s)]
+- accent: [accent color, usage scope]
+```
+
+Only include colors or color roles that must stay fixed during generation. Identify dominant vs supporting roles, not just a loose palette list.
+
+### typography
+
+Record only the type directions or font families that must stay fixed. Do not include typography preferences that are not execution constraints.
+
+### rhythm
+
+```md
+### rhythm
+- global_rhythm: [global rhythm rule]
+- [page_role]_rhythm: [page-level hard rhythm tag if needed]
+```
+
+### brand_constraints
+
+```md
+### brand_constraints
+- level: strict / light / free
+- mandatory: [what must appear]
+- flexible: [what may vary]
+- identity_anchors: [which identity anchors must remain visible, referenced, or semantically present]
+```
+
+### content_grounding
+
+The content_grounding section locks the claim policy for the generation pass:
+
+```md
+### content_grounding
+- content_basis_source: content_report.md / user-provided report / extracted summary / none
+- allowed_claim_types: user_provided, inferred-with-restrained-wording
+- forbidden_claim_types: unsupported precise statistics, invented citations, fabricated experiment results, invented rankings, invented institutional conclusions
+- uncertain_claim_policy: keep general rather than falsely specific; flag for user confirmation
+- preview_content_policy: preview copy must draw from content_report.md content basis; do not use placeholder copy
+```
+
+If `content_report.md` exists, this section must lock which claim types are safe to use and which must stay generalized or await confirmation.
+
+### forbidden
+
+<Warning>
+  The forbidden section is not a style preference list. Every item here is a hard constraint that generation must never violate.
+</Warning>
+
+Standard forbidden items:
+
+- **Unapproved post-generation overlays** — no overlays that were not defined in the approved slide blueprint
+- **Explanatory patch boxes or rescue text** — no text boxes added to compensate for weak generation output; fix the generation path instead
+- **Unconfirmed one-off preview details upgraded to deck-wide constraints** — if a feature was only stable in one preview page and was not confirmed as deck-wide, it must not appear as a global constraint here
+- **Unsupported precise statistics** — no invented numbers, experiment results, citations, rankings, or institutional conclusions
+- **Ratio drift** — do not default to a generic art ratio; maintain the locked canvas ratio throughout
+
+## Difference from design_spec.md
+
+`spec_lock.md` and `design_spec.md` record overlapping information in different registers for different readers.
+
+| | `design_spec.md` | `spec_lock.md` |
+|---|---|---|
+| **Reader** | Human (for reasoning and review) | Machine (for generation execution) |
+| **Format** | Connected prose with explanation | Compressed field notation |
+| **Rationale** | Included | Not included |
+| **Scope** | Global deck rationale | Only what must not drift |
+| **Continuity anchor** | Prose + structured block | Compressed machine-oriented fields |
+| **Written** | After style inversion confirmation | Always last, after both other planning files |
+
+<Warning>
+  Do not duplicate long narrative content from `design_spec.md` into `spec_lock.md`. If a decision needs explanation, put the explanation in the design spec. The spec lock records only the constraint, not the reasoning behind it.
+</Warning>
+
+## Rules
+
+- Keep this file machine-oriented. Do not explain rationale.
+- Only put what must stay fixed during execution.
+- Unless explicitly approved and mapped to blueprint fields, the default post-generation overlay count is **zero**.
+- If a reverse-engineered feature was not confirmed as deck-wide, keep it out of this file or scope it explicitly to the pages that need it.
+- Do not duplicate narrative from `design_spec.md`.
+
+<CardGroup cols={2}>
+  <Card title="Design Spec" icon="pencil-ruler" href="/artifacts/design-spec">
+    See the human-readable rationale file that spec_lock.md distills into execution constraints.
+  </Card>
+  <Card title="Slide Blueprint" icon="layout-list" href="/artifacts/slide-blueprint">
+    See how claim statuses and overlay decisions in the blueprint feed into spec_lock.md.
+  </Card>
+  <Card title="Continuity anchor" icon="link" href="/style-system/continuity-anchor">
+    Deep-dive on the deck-level continuity anchor format used across all planning files.
+  </Card>
+  <Card title="Generation and review" icon="play" href="/workflow/generation-and-review">
+    See how spec_lock.md governs the generation pass and what happens when constraints drift.
+  </Card>
+</CardGroup>

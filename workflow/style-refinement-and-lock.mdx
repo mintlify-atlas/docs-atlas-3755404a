@@ -1,0 +1,144 @@
+---
+title: "Stages 2.5 and 2.75: Style refinement and inversion lock"
+description: "How refinement rounds work, what inversion confirmation extracts from chosen previews, and why planning files are written only after direction is locked."
+---
+
+Before you reach **风格确认**, you can run as many refinement rounds as you need. And before any planning file is written, the skill runs a **风格反演确认** step that reads the chosen preview images as visual evidence rather than relying solely on the original prompt wording. These two sub-stages — refinement (Stage 2.5) and inversion confirmation (Stage 2.75) — are what prevent the planning files from inheriting an imprecise description of what you actually liked.
+
+## Stage 2.5 — Style refinement rounds
+
+If you are not ready to confirm a final direction after the initial preview set, refinement rounds let you iterate before committing.
+
+### How a refinement round works
+
+<Steps>
+  <Step title="Choose a base direction">
+    You pick one current direction as the starting point. The refinement round works within that direction's identity rather than treating it as permission to pivot to an entirely different approach.
+  </Step>
+  <Step title="Refinement-time style inversion">
+    Before deriving any new variations, the skill runs a short inversion pass on the chosen base direction. It reads the existing 首页 / 目录页 / 正文页 together with the original generation prompt and summarizes what this direction actually became in the generated images — which parts appear stable and suitable to inherit, and which may be one-off effects.
+
+    This step prevents the next round of variations from inheriting rendering accidents or isolated composition tricks as if they were intended style features.
+  </Step>
+  <Step title="Express adjustments">
+    After seeing the inversion summary, you say what you want adjusted. The skill offers lightweight tweak cues to help you think, but does not require you to use them.
+  </Step>
+  <Step title="Derive and preview variations">
+    The skill derives the requested number of candidate directions from the base and generates the same 首页 / 目录页 / 正文页 preview set for each. If you give no clear count, the default is 3 derived directions.
+  </Step>
+</Steps>
+
+### Lightweight tweak cues
+
+During refinement, the skill proactively suggests a few adjustment directions to help you react in natural language. These are cues, not a fixed menu:
+
+- `对比度高一点`
+- `色彩再鲜艳一点`
+- `更克制一点`
+- `更有高级感一点`
+- `信息感更强一点`
+- `画面更轻一点`
+- `文字多一点还是图片多一点`
+
+You can respond to any of these in plain language, ignore them entirely, or describe what you want without referencing them.
+
+### Two valid paths after a refinement round
+
+When presenting a refinement round result, the skill explicitly tells you there are two paths forward — it does not frame the result as if the only option is to pick a direction and proceed to generation:
+
+1. **继续沿某个方向再推一轮** — Run another refinement round from a new base
+2. **就以当前某个方向结束风格阶段，进入后续定稿与生成** — Confirm a direction and close the style stage
+
+Refinement rounds repeat until you are ready to reach **风格确认**.
+
+## Stage 2.75 — Style inversion confirmation
+
+After **风格确认** and before writing any planning files, the skill runs one dedicated **风格反演确认** step. This is not optional and is not a repeat of the refinement-time inversion — it is a full inversion pass on the final chosen direction.
+
+### What inversion reads
+
+The skill reads the chosen 首页 / 目录页 / 正文页 as visual evidence of what you actually liked:
+
+- It compares the actual images with the original generation prompt to identify what the model really produced
+- It extracts stable repeated style facts from the images: brightness range, palette role usage, material feel, lighting and depth behavior, container grammar, edge treatment, decoration grammar, information density, text-image balance, and overall restraint level
+- It also extracts theme-specific or scene-specific liked elements such as school emblems, campus buildings, company marks, laboratory context, domain imagery, clouds, devices, chart language, or other subject anchors
+- It distinguishes between what appears consistently across all three preview pages and what only works as a one-off local flourish
+
+<Note>
+The skill trusts the confirmed preview evidence more than the raw prompt wording when they differ. Only features that are either visually stable across the selected previews or explicitly confirmed by you are locked into the continuity anchor.
+</Note>
+
+### The 3-bucket reporting system
+
+The inversion result is presented in three groups. You confirm, remove, or promote items between groups:
+
+| Bucket | Label | What goes here |
+|---|---|---|
+| 1 | **明确应延续的** | Style facts that appear consistently across all three preview pages and clearly belong in the deck |
+| 2 | **效果好但需要确认是否整套延续的** | Elements that worked well but may be too scene-specific to mandate across every slide |
+| 3 | **只在当前图里偶然成立，不建议锁死的** | Rendering accidents, isolated composition tricks, or one-off flourishes that should not become deck-level rules |
+
+If you give no correction, the skill keeps Bucket 1 by default and does not automatically hard-lock Bucket 2 as deck-wide constraints.
+
+<Tip>
+The skill favors concrete extracted elements over vague labels. For example: "校徽 / 校名 / 校园建筑这些主题实体锚点应延续" and "蓝白主调 + 金色点缀 + 学术答辩感应延续" are more useful continuity specs than "高级感" or "贴题".
+</Tip>
+
+### Converting to the deck-level continuity anchor
+
+After you confirm the inversion result, the confirmed findings become the **deck-level continuity anchor** — the specification that every later slide prompt must inherit before adding any page-role or content-specific variation.
+
+The continuity anchor explicitly holds steady:
+- Base brightness tendency
+- Palette roles
+- Lighting logic
+- Material language
+- Container grammar
+- Decoration grammar
+- Emphasis tone
+- Restraint level
+- Any user-confirmed thematic anchors or recurring motifs extracted from the preview evidence
+
+<Card title="Continuity anchor reference" icon="link" href="/style-system/continuity-anchor">
+  How the deck-level continuity anchor is structured and how it prevents style drift across slides
+</Card>
+
+## Writing the planning files
+
+Planning files are written only after the inversion confirmation is complete and the continuity anchor is set. The skill does not enter this step while style refinement is still active and does not skip **风格反演确认** to write files faster.
+
+The three planning artifacts are written in this order:
+
+1. `design_spec.md` — global deck rationale: chosen direction, visual system, continuity anchor, page structure overview
+2. `slide_blueprint.md` — page-by-page intent: one entry per slide with approved content and layout intent
+3. `spec_lock.md` — execution constraints: what is locked and cannot drift during generation
+
+After writing the files, the skill outputs a short pre-generation summary covering the project overview, chosen style result, continuity anchor, page structure summary, and execution readiness. This summary is what you read before the third confirmation point.
+
+<CardGroup cols={2}>
+  <Card title="design_spec.md" icon="file" href="/artifacts/design-spec">
+    Global deck rationale and visual system specification
+  </Card>
+  <Card title="slide_blueprint.md" icon="file-lines" href="/artifacts/slide-blueprint">
+    Page-by-page content and layout intent
+  </Card>
+</CardGroup>
+
+## Confirmation point 3 — 生成前确认
+
+After reading the pre-generation summary, you confirm whether generation can start. This is the third and final mandatory confirmation point. Only after this confirmation does the skill proceed into final image generation.
+
+<Warning>
+Do not skip or defer **生成前确认**. Once generation starts, the planning files are treated as locked. Changes to approved content after this point are classified as blueprint changes, not visual retouches, and require explicit surfacing before the skill will edit them.
+</Warning>
+
+## What comes next
+
+<CardGroup cols={2}>
+  <Card title="Generation and review" icon="film" href="/workflow/generation-and-review">
+    How final page visuals are generated, the candidate picker, and the review shell
+  </Card>
+  <Card title="Workflow overview" icon="arrows-spin" href="/workflow/overview">
+    See all five stages and three confirmation points at a glance
+  </Card>
+</CardGroup>

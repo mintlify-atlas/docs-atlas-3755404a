@@ -1,133 +1,60 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
-icon: 'star'
+title: "PPT Image First: Conversation-first slide workflow"
+description: "From a rough idea to a finished PPTX: staged conversation, real preview images, and locked planning files — without rigid templates or parameter forms."
 ---
 
-## Setting up
+PPT Image First is a workflow skill for AI coding assistants — Codex, Claude Code, and OpenCode — that takes you from a rough PPT idea all the way to a finished, image-rendered PPTX. Instead of jumping straight into templates or parameter forms, it builds content depth first, generates real visual previews for multiple style directions, and only locks the deck design after you've approved what you actually see.
 
-Get your documentation site up and running in minutes.
-
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
-</Card>
-
-## Make it yours
-
-Design a docs site that looks great and empowers your users.
-
-<Columns cols={2}>
-  <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
-  >
-    Edit your docs locally and preview them in real time.
+<CardGroup cols={2}>
+  <Card title="Introduction" icon="book-open" href="/introduction">
+    Understand what PPT Image First is, why it exists, and when to use it
   </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Install the skill and run your first PPT workflow in minutes
   </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
+  <Card title="Workflow overview" icon="arrows-spin" href="/workflow/overview">
+    See all five stages and three confirmation points at a glance
   </Card>
-  <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Auto-generate API documentation from OpenAPI specifications.
+  <Card title="Style system" icon="palette" href="/style-system/vectors">
+    Learn how V1–V8 style vectors drive proposal generation under the hood
   </Card>
-</Columns>
+</CardGroup>
 
-## Create beautiful pages
+## How it works
 
-Everything you need to create world-class documentation.
+PPT Image First runs in five stages, each with a clear output before moving on.
 
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
-  </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
-  </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
-  </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
-  </Card>
-</Columns>
+<Steps>
+  <Step title="Intake and content research">
+    The skill collects the essentials — purpose, audience, materials — then builds a `content_report.md` that grounds every later preview and planning file in real content rather than generic placeholders.
+  </Step>
+  <Step title="Style proposals and preview">
+    Multiple style directions are proposed as lightweight cards, each backed by real generated preview images covering the cover page, TOC page, and a body page. No text mockups — actual images.
+  </Step>
+  <Step title="Style lock and planning files">
+    After you confirm a direction, a style inversion pass extracts the stable visual facts from the chosen previews. Three planning files — `design_spec.md`, `slide_blueprint.md`, and `spec_lock.md` — are written before any final generation starts.
+  </Step>
+  <Step title="Final generation">
+    GPT Image 2 renders each slide as a full-page visual. You choose whether to get one image per slide or multiple candidates per slide using the bundled candidate-picker shell.
+  </Step>
+  <Step title="Review and retouch">
+    A dedicated review HTML shell lets you inspect every slide, copy structured feedback, and paste it back into the chat to trigger targeted retouches — page-by-page, region-by-region.
+  </Step>
+</Steps>
 
-## Make your content agent ready
+## Explore the docs
 
-Make your docs work for humans and AI agents alike.
-
-<Columns cols={2}>
-  <Card
-    title="Prompt component"
-    icon="robot"
-    href="/agent-ready/prompt"
-  >
-    Embed shareable AI prompts readers can copy or open in Cursor.
+<CardGroup cols={2}>
+  <Card title="Planning artifacts" icon="file-lines" href="/artifacts/content-report">
+    Understand the four output files — content report, design spec, slide blueprint, and spec lock
   </Card>
-  <Card
-    title="Visibility"
-    icon="eye"
-    href="/agent-ready/visibility"
-  >
-    Show different content to humans and agents reading your docs.
+  <Card title="Bundled HTML shells" icon="window" href="/assets/preview-shell">
+    Learn how the preview, candidate-picker, and review shells work and when each is used
   </Card>
-  <Card
-    title="Contextual menu"
-    icon="bolt"
-    href="/agent-ready/contextual"
-  >
-    Give readers one-click access to Claude, ChatGPT, Cursor, and more.
+  <Card title="Continuity anchor" icon="link" href="/style-system/continuity-anchor">
+    See how the deck-level continuity anchor prevents style drift across slides
   </Card>
-  <Card
-    title="AI coding tools"
-    icon="wand-magic-sparkles"
-    href="/ai-tools/claude-code"
-  >
-    Set up Claude Code, Cursor, or Windsurf with Mintlify's skill.
+  <Card title="Installation" icon="download" href="/installation">
+    Copy the skill into your assistant and verify the bundled assets are in place
   </Card>
-</Columns>
-
-## Need inspiration?
-
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
-</Card>
+</CardGroup>

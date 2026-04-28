@@ -1,0 +1,196 @@
+---
+title: 'Content Report: Pre-Style Content Basis Artifact'
+description: 'Learn how content_report.md turns raw topics and thin materials into a substantive upstream content basis before any style work begins.'
+---
+
+`content_report.md` is the first planning artifact produced in the PPT Image First workflow. It exists to solve a specific problem: style decisions made before the content is understood tend to produce visually polished but intellectually shallow decks. By forcing a research-style consolidation of the topic _before_ any style work begins, the content report gives every downstream file — previews, design spec, slide blueprint, and spec lock — a grounded source to draw from rather than a blank topic label.
+
+## When it's created
+
+`content_report.md` is created after **需求确认** (Stage 1 baseline confirmation) and before style-boundary alignment. This position in the workflow is deliberate: the report must exist before the first style proposals are generated so that preview pages can draw from real content rather than generic placeholder logic.
+
+<Steps>
+  <Step title="需求确认 completes">
+    The user confirms the deck goal, audience, page range, and identity anchors from the Stage 1 baseline judgment.
+  </Step>
+  <Step title="content_report.md is produced">
+    The AI generates the content basis using one of two writing modes depending on the richness of the user's materials.
+  </Step>
+  <Step title="Style-boundary alignment begins">
+    Only after the content report exists does the workflow move into the three style-boundary questions (brightness, style route, preview count).
+  </Step>
+  <Step title="Previews draw from the report">
+    Cover positioning comes from the Content Thesis, TOC structure from Section Candidates, and body pages from Page Content Candidates — not from fresh generic topic logic.
+  </Step>
+</Steps>
+
+## Two writing modes
+
+The writing mode is chosen based on the quality and completeness of what the user has provided.
+
+<AccordionGroup>
+  <Accordion title="整理但不扩写 — organize without expanding">
+    Used when the user has already provided a strong, complete, report-like source: a finished paper, project document, experiment record, full outline, or another narrative already strong enough to support page planning.
+
+    In this mode the work is extraction and structuring — condensing and organizing the provided material without inventing a new thesis or adding claims the source does not support. The output still reads as a connected report-like article, not a bare bullet list.
+  </Accordion>
+  <Accordion title="补强并报告化生成 — strengthen and generate as a report">
+    Used when the user has only provided a topic, thin material, partial material, or scattered notes.
+
+    In this mode the AI strengthens the content basis enough that the PPT will not become shallow. The narrative body must be substantive enough to support real previews and real page planning. This is the default mode — it applies whenever the user's starting point is not already a complete report-like source.
+  </Accordion>
+</AccordionGroup>
+
+<Note>
+  Even in 整理但不扩写 mode, the output must read as a connected report-like article. Reducing it to a bare bullet list is not acceptable.
+</Note>
+
+## Required sections
+
+`content_report.md` has seven required sections. Every section must be present regardless of which writing mode is used.
+
+### I. Source Status
+
+The Source Status section records the material baseline before any generation work begins. It uses five structured fields:
+
+```md
+### I. Source Status
+- source_level: topic_only / thin_materials / partial_materials / scattered_materials / complete_report
+- user_provided_materials: [what the user actually supplied]
+- inferred_context: [what was filled in by the AI based on domain knowledge]
+- source_limitations: [what is missing, uncertain, or not supportable with the current materials]
+- claims_policy: [how claims are classified and handled in this report]
+```
+
+The `source_level` field classifies the user's starting point on a five-point scale from `topic_only` to `complete_report`. This classification controls how aggressively the AI strengthens the narrative body in the writing step.
+
+### II. Content Thesis
+
+<AccordionGroup>
+  <Accordion title="What belongs in Content Thesis">
+    - What this deck is really about — the actual subject matter claim, not just the topic label
+    - Why this topic matters for the current audience
+    - What the deck is trying to prove, explain, defend, or persuade
+
+    This is the intellectual anchor of the report. The cover framing in later previews and the narrative spine in `design_spec.md` both derive from this section.
+  </Accordion>
+</AccordionGroup>
+
+### III. Narrative Body
+
+The Narrative Body is the substantive core of the report. It must be written as connected prose, not just a list of bullets. A complete Narrative Body typically includes:
+
+- Background and topic framing
+- Core problem or core objective
+- Analysis body
+- Method, logic, solution, or project path (when applicable)
+- Findings, value, or implications (when applicable)
+- Conclusion direction suitable for PPT narration
+
+<Tip>
+  If the user provided thin materials, this section must be strengthened enough that the PPT will not become shallow. If the user provided complete materials, condense and organize them without inventing a new thesis.
+</Tip>
+
+### IV. Section Candidates
+
+Section Candidates maps the narrative into a likely chapter structure:
+
+- Likely chapter structure
+- Candidate section titles
+- Likely page clusters
+- What each cluster needs to communicate
+
+Later `slide_blueprint.md` entries should trace back to this section rather than inventing a separate generic deck outline.
+
+### V. Page Content Candidates
+
+Page Content Candidates translates the section structure into specific page-level thinking:
+
+- Cover framing candidate
+- TOC structure candidate
+- Body-page candidate arguments
+- Key conclusion page candidate
+- Pages that may need comparison, process, diagram, evidence, or case logic
+
+### VI. Visualizable Content
+
+<AccordionGroup>
+  <Accordion title="Visualizable Content fields">
+    - Metrics or number types that would make sense if supported
+    - Process or framework candidates
+    - Comparison candidates
+    - Relationship, hierarchy, or flow candidates
+    - Scenes, objects, entities, or anchors that can be visualized
+
+    This section gives the visual strategy in `slide_blueprint.md` something concrete to work with. An empty or vague Visualizable Content section will force the visual strategy entries to fall back to generic descriptions.
+  </Accordion>
+</AccordionGroup>
+
+### VII. Claim Status / Open Questions
+
+The Claim Status section separates what is known from what is inferred from what is uncertain:
+
+- **User-provided facts** — claims that came directly from the user's materials
+- **Inferred but usable claims** — claims the AI derived from domain knowledge and synthesis
+- **Claims that need confirmation** — assertions that should not be treated as strong conclusions until confirmed
+- **Open questions** — gaps that should not block style exploration but should be tracked
+
+## Claims policy
+
+Every claim in the report must be traceable to one of three statuses: `user_provided`, `inferred`, or `needs_confirmation`. This policy carries forward into `slide_blueprint.md` (via the `claim_status` field per slide) and into `spec_lock.md` (via the `content_grounding` section).
+
+<Warning>
+  Do not invent precise statistics, experiment results, citations, rankings, or institutional conclusions without support from the user's materials. If no reliable precise evidence exists, keep the claim general rather than falsely specific.
+</Warning>
+
+## What the user sees
+
+By default the user sees a **synthesized judgment**, not the full report text. The AI surfaces the key thesis, the section candidate structure, and any open questions that need input — without dumping the entire content report into the chat. The full report is written to `content_report.md` and used by downstream files.
+
+## How downstream files use this artifact
+
+<AccordionGroup>
+  <Accordion title="Preview pages (首页 / 目录页 / 正文页)">
+    - Cover positioning comes from Content Thesis
+    - TOC structure comes from Section Candidates
+    - Body-page content comes from Page Content Candidates and Visualizable Content
+
+    Previews must draw from this file directly. They must not be rebuilt from a fresh generic topic outline.
+  </Accordion>
+  <Accordion title="design_spec.md">
+    - Narrative Spine section inherits from Content Thesis and Narrative Body
+    - Content Structure section references the Section Candidates structure
+    - The spec identifies which claims are user-provided vs inferred vs still needing confirmation
+  </Accordion>
+  <Accordion title="slide_blueprint.md">
+    - Every slide entry's `content_basis_binding` field must state which section of `content_report.md` that page derives from
+    - The `claim_status` field per slide maps back to the Claim Status section
+    - The slide list traces back to Section Candidates rather than being invented independently
+  </Accordion>
+  <Accordion title="spec_lock.md">
+    - The `content_grounding` section locks which claim types are safe to use and which must stay generalized
+    - The `forbidden` section enforces the no-invented-statistics rule that originates here
+  </Accordion>
+</AccordionGroup>
+
+## Rules
+
+- Write a compact but substantive research-style report. Not a raw dump. Not a minimal outline.
+- Prefer connected reasoning over generic bullet accumulation.
+- Distinguish what came from the user vs what was inferred.
+- Later previews and planning files should reference this file instead of rebuilding content from scratch.
+
+<CardGroup cols={2}>
+  <Card title="Slide Blueprint" icon="layout-list" href="/artifacts/slide-blueprint">
+    See how each slide entry binds back to content_report.md sections via content_basis_binding.
+  </Card>
+  <Card title="Design Spec" icon="pencil-ruler" href="/artifacts/design-spec">
+    See how the Narrative Spine and Content Structure sections inherit from this report.
+  </Card>
+  <Card title="Content Research stage" icon="search" href="/workflow/content-research">
+    Understand Stage 1.25 in the full workflow — when and how content_report.md is produced.
+  </Card>
+  <Card title="Spec Lock" icon="lock" href="/artifacts/spec-lock">
+    See how spec_lock.md encodes the content grounding policy that originates here.
+  </Card>
+</CardGroup>

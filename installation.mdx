@@ -1,0 +1,125 @@
+---
+title: "Install PPT Image First in your AI assistant"
+description: "Clone the repository, place it where your assistant can read it, and load SKILL.md as the skill entry point in Codex, Claude Code, or OpenCode."
+---
+
+PPT Image First is a skill file-based workflow — there is no package to install and no server to run. Setup comes down to three things: getting the repository files in place, pointing your AI assistant at `SKILL.md`, and verifying the bundled HTML shells are readable. Once those are in place, the skill activates whenever you ask your assistant to create a PPT, deck, presentation, or slide document.
+
+## Repository structure
+
+The repository contains the skill entry point, reference documents, planning file templates, and three bundled HTML workflow shells:
+
+```text
+ppt-image-first/
+├─ SKILL.md
+├─ README.md
+├─ README.en.md
+├─ references/
+│  ├─ workflow.md
+│  ├─ conversation_framework.md
+│  ├─ preview-flow.md
+│  └─ style-system.md
+├─ templates/
+│  ├─ content_report_reference.md
+│  ├─ design_spec_reference.md
+│  ├─ slide_blueprint_reference.md
+│  └─ spec_lock_reference.md
+└─ assets/
+   ├─ preview_shell/index.html
+   ├─ candidate_picker_shell/index.html
+   └─ review_shell/index.html
+```
+
+The `references/` directory holds the detailed stage-by-stage workflow documentation that the skill reads at runtime. The `templates/` directory holds reference templates for each planning artifact. The `assets/` directory holds the three bundled HTML shells used during the preview, candidate selection, and review stages.
+
+## Installation steps
+
+<Steps>
+  <Step title="Clone or download the repository">
+    Clone the repository using Git:
+
+    ```bash
+    git clone https://github.com/NyxTides/ppt-image-first.git
+    ```
+
+    Or download and extract the ZIP archive from the repository page.
+  </Step>
+
+  <Step title="Place the repository folder where your AI assistant can read it">
+    Move or copy the `ppt-image-first/` folder to a location your assistant has file-system access to. For most local setups, a folder within your home directory or project workspace works. The assistant must be able to read all files inside the repository, including nested files in `references/`, `templates/`, and `assets/`.
+  </Step>
+
+  <Step title="Load SKILL.md as the skill entry point">
+    In your AI assistant, load `SKILL.md` as the skill entry point. The exact method depends on your assistant:
+
+    - **Codex** — add the file path to your skill configuration
+    - **Claude Code** — place or reference `SKILL.md` so it is included in the agent's context on startup
+    - **OpenCode** — use the skill loader to point at the `SKILL.md` file
+
+    The skill description in `SKILL.md` tells the assistant when to activate: when you ask to create a PPT, presentation, deck, 答辩稿, 路演 deck, 产品介绍 PPT, or similar, or when you have only a topic or rough materials and need help clarifying structure, style, and page planning before generation.
+  </Step>
+
+  <Step title="Verify the assistant can access the references/ and assets/ directories">
+    The skill reads additional reference files at runtime — it does not load everything from `SKILL.md` alone. Confirm that the assistant can read files from these paths relative to the skill root:
+
+    - `references/workflow.md`
+    - `references/conversation_framework.md`
+    - `references/style-system.md`
+    - `references/preview-flow.md`
+    - `templates/content_report_reference.md`
+    - `templates/design_spec_reference.md`
+    - `templates/slide_blueprint_reference.md`
+    - `templates/spec_lock_reference.md`
+
+    If the assistant cannot read these files, the skill will be missing the detailed stage instructions it relies on during the workflow.
+
+    <Tip>
+      Verify that the three bundled HTML shells are accessible before starting your first deck:
+
+      - `assets/preview_shell/index.html`
+      - `assets/candidate_picker_shell/index.html`
+      - `assets/review_shell/index.html`
+
+      These shells are mandatory workflow assets. The skill fills them with proposal cards, preview images, and generated slide visuals — it does not create replacement shells on the fly. If the skill cannot access these files, it will tell you what is blocking it rather than silently substituting a different interface.
+    </Tip>
+
+    <Note>
+      PPT Image First uses **GPT Image 2** to generate full slide page visuals. Verify that your environment has image generation capability before starting a deck. If image generation is not available, the skill will tell you that preview generation is available but blocked, and will not substitute text mockups without your explicit request.
+    </Note>
+  </Step>
+</Steps>
+
+## What to expect after installation
+
+Once the skill is loaded, start a conversation and describe your PPT goal. The skill activates on requests like:
+
+```text
+Help me make a pitch deck for our product launch.
+```
+
+```text
+Turn this research paper into a 15-slide conference presentation.
+```
+
+```text
+I need a thesis defense PPT. I only have rough notes right now.
+```
+
+The skill takes it from there — light intake, content research if needed, style previews, planning files, generation, and review — without asking you to configure design parameters manually.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Walk through the full workflow end-to-end step by step
+  </Card>
+  <Card title="Workflow overview" icon="arrows-spin" href="/workflow/overview">
+    See all five stages and three confirmation points at a glance
+  </Card>
+  <Card title="Preview shell" icon="window" href="/assets/preview-shell">
+    Learn how the bundled preview shell works during style proposals
+  </Card>
+  <Card title="Review shell" icon="magnifying-glass" href="/assets/review-shell">
+    Understand how the review shell handles retouch feedback
+  </Card>
+</CardGroup>

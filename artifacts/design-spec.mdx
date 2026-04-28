@@ -1,0 +1,179 @@
+---
+title: 'Design Spec: Deck-Level Rationale and Style Direction'
+description: 'How design_spec.md captures the global visual rationale, narrative spine, and continuity anchor that govern every slide in the deck.'
+---
+
+`design_spec.md` is the human-readable global rationale file for the deck. It explains _why_ the deck looks and reads the way it does — the chosen style direction, the narrative logic, the continuity rules, and the constraints that follow from confirmed style evidence. Unlike `spec_lock.md`, which encodes machine-oriented execution constraints, the design spec is written for human reasoning: it connects the user's confirmed preferences to the design decisions that will govern the full generation pass.
+
+## When it's written
+
+`design_spec.md` is written after **风格反演确认** (Stage 2.75 style inversion confirmation) and before `slide_blueprint.md`. It must not be written while style refinement is still active, and it must not be written before the inversion confirmation is finished.
+
+<Steps>
+  <Step title="风格确认 completes">
+    The user selects a final style direction from the proposal and refinement rounds.
+  </Step>
+  <Step title="风格反演确认 runs">
+    The AI reads the confirmed preview images as visual evidence, extracts stable style facts, and confirms with the user which elements should extend deck-wide vs remain local.
+  </Step>
+  <Step title="design_spec.md is written">
+    The seven sections below are populated using the confirmed inversion result, the content basis from `content_report.md`, and the user's explicit preferences.
+  </Step>
+  <Step title="slide_blueprint.md follows">
+    The slide blueprint can now reference the design spec's continuity anchor and narrative spine rather than reconstructing those decisions from scratch.
+  </Step>
+</Steps>
+
+## Seven required sections
+
+### I. Project Information
+
+The Project Information section records the fixed parameters of the deck:
+
+- Project name
+- Deck goal
+- Audience
+- Use case
+- Page range
+- Language
+- Content basis source (`content_report.md` / user-provided report / extracted summary / none)
+- Identity anchors such as school, company, laboratory, research group, course, or brand entity
+- Ratio (`16:9` by default unless explicitly overridden)
+
+### II. Narrative Spine
+
+<AccordionGroup>
+  <Accordion title="What belongs in Narrative Spine">
+    - What the deck is trying to prove or deliver
+    - The top-level story arc
+    - How this narrative inherits or compresses the current content basis
+    - Which major points are user-provided vs inferred vs still need confirmation
+
+    If `content_report.md` exists, the Narrative Spine should compress and inherit from it rather than reconstructing the content logic from scratch.
+  </Accordion>
+</AccordionGroup>
+
+### III. Style Direction
+
+The Style Direction section records the outcome of the style proposal and inversion stages:
+
+- Chosen style proposal name
+- One-line positioning
+- Cover direction
+- Body-page visual grammar
+- Why this direction fits the deck
+- Reverse-engineered preview facts — the stable style properties extracted from actual preview images
+- User-confirmed liked elements to preserve deck-wide
+- Elements that should stay local to specific page roles and should not be hard-locked deck-wide
+- Deck-level continuity anchor (see format below)
+
+### IV. Global Design Principles
+
+<AccordionGroup>
+  <Accordion title="What belongs in Global Design Principles">
+    - Density and rhythm principles
+    - Text–visual balance tendency
+    - Brand constraint level
+    - Image strategy
+    - Base brightness and background mood policy
+
+    These principles apply across all slides. They are human-readable explanations of the choices encoded as hard constraints in `spec_lock.md`.
+  </Accordion>
+</AccordionGroup>
+
+### V. Content Structure
+
+The Content Structure section maps the content basis onto the planned deck:
+
+- Section breakdown
+- Intended page flow
+- Where the major emphasis points occur
+- What part of the structure comes from `content_report.md` or equivalent content-basis extraction
+- Which claims need restrained wording because they are not fully confirmed
+
+### VI. Preview-to-Deck Continuity
+
+<AccordionGroup>
+  <Accordion title="What belongs in Preview-to-Deck Continuity">
+    - How the confirmed style previews should extend into the full deck
+    - Which reverse-engineered facts came from the actual previews rather than only from the prompt
+    - What must remain consistent across all slides
+    - Which liked elements become deck-wide anchors
+    - Which liked elements stay local to specific page roles only
+    - Where page variation is encouraged
+
+    This section is the bridge between the three-preview confirmation and the full generation pass. It makes explicit which facts are grounded in image evidence vs which are inherited from the original prompt.
+  </Accordion>
+</AccordionGroup>
+
+### VII. Constraints
+
+The Constraints section records what must not happen:
+
+- Hard requirements
+- Things to avoid
+- Post-generation overlay policy
+- Unsupported-claim policy
+- Source-grounding policy
+
+**Post-generation overlay policy:** Post-generation overlays default to zero. Editable overlays are only permitted when they are traceable to explicit fields in the approved slide blueprint. Adding explanatory boxes, correction notes, or patch text to compensate for weak generation is forbidden — the generation path must be fixed instead.
+
+**Source-grounding policy:** Claims that are not grounded in `content_report.md` or user-provided materials must be treated as inferred. Inferred claims must use restrained wording. Precise statistics, experiment results, citations, rankings, and institutional conclusions must not be invented without source support.
+
+## The continuity anchor format
+
+The deck-level continuity anchor is the most structurally important part of Section III. It should be written as a short structured block rather than a vague prose paragraph. The anchor defines the stable visual world that all slides must stay inside, plus the allowed variation range at the edges.
+
+Cover at least these eight fields:
+
+- `brightness_world` — the base brightness register for the deck
+- `background_mood` — the mood and texture policy for backgrounds
+- `palette_roles` — which colors play dominant vs supporting vs accent roles
+- `lighting_depth` — the lighting and depth model
+- `material_language` — the surface and material feel
+- `container_grammar` — panel shapes, dividers, and frame types
+- `emphasis_tone` — the editorial tone for emphasis elements
+- `allowed_variation` — where the deck may move relative to the base without breaking continuity
+
+The following example is taken directly from the template:
+
+```md
+### deck-level continuity anchor
+- brightness_world: high-key bright scientific board
+- background_mood: bright, clean, research-led; do not drift into dark control-room mood
+- palette_roles: white/light-cyan base, deep-blue as structure color, cyan-blue as data highlight, warm accent only for sparse emphasis
+- lighting_depth: soft luminous depth, restrained glow, no heavy neon contrast
+- material_language: translucent research panels + clean diagram surfaces
+- container_grammar: rounded rectangular panels, fine-line dividers, light overlays, no heavy HUD frames
+- emphasis_tone: precise, academic, polished, readable
+- allowed_variation: cover may be slightly more atmospheric; data-heavy pages may deepen contrast slightly; full dark-background slides are not allowed
+```
+
+<Tip>
+  If the confirmed previews reveal stronger or more specific style facts than the original prompt wording, write the stronger reverse-engineered version in the continuity anchor — not the weaker original prompt description.
+</Tip>
+
+## Notes on scope
+
+<Warning>
+  Do not turn `design_spec.md` into a page-by-page blueprint. That work belongs in `slide_blueprint.md`. The design spec explains the deck at the global level only.
+</Warning>
+
+- Do not put machine-execution parameters here unless they are needed for human reasoning. Machine-oriented lock fields belong in `spec_lock.md`.
+- If a feature was liked only in one preview page and was not confirmed as deck-wide, mark that scope explicitly instead of silently upgrading it into a global rule.
+- If a confirmed preview reveals a style fact that contradicts the original prompt, trust the image evidence and write the stronger confirmed version.
+
+<CardGroup cols={2}>
+  <Card title="Slide Blueprint" icon="layout-list" href="/artifacts/slide-blueprint">
+    See how slide entries inherit from the continuity anchor defined here.
+  </Card>
+  <Card title="Spec Lock" icon="lock" href="/artifacts/spec-lock">
+    See how design_spec.md rationale becomes machine-oriented execution constraints.
+  </Card>
+  <Card title="Style proposals and preview" icon="image" href="/workflow/style-proposals-and-preview">
+    Understand the style proposal stage that precedes this artifact.
+  </Card>
+  <Card title="Style refinement and lock" icon="sliders" href="/workflow/style-refinement-and-lock">
+    See the inversion confirmation stage that must complete before design_spec.md is written.
+  </Card>
+</CardGroup>

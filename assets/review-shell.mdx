@@ -1,0 +1,82 @@
+---
+title: "Review Shell: final slide review and retouch UI"
+description: "The bundled HTML shell for inspecting all generated slides in order, copying structured JSON feedback, and triggering retouch rounds before PPT export."
+---
+
+The review shell is a self-contained HTML file at `assets/review_shell/index.html` that serves as the main collaboration surface for Stage 5. After the first full set of page visuals is generated, the skill assembles all slide images into this shell and opens it so you can inspect every page in order, leave structured feedback, and trigger targeted retouches — without switching to the live PPT file as the review surface. The shell is updated and reopened after each retouch round, and the loop continues until you approve the pages.
+
+## When it is used
+
+The review shell opens in Stage 5, immediately after the first full set of page visuals is ready. The `assets/review_shell/` directory includes a companion script `build_review_html.py` alongside `index.html` to assist with populating the shell programmatically. If you chose the multi-candidate path in Stage 4, the review shell opens after candidate selection is complete and the chosen images are mapped. If you chose the single-candidate path, it opens directly after generation.
+
+## What it shows
+
+The shell displays every generated slide image in page order. Images stay primary — the layout is not dominated by control panels. Each page supports per-page review, and the shell provides two copy buttons:
+
+- **复制当前页结果** — copies the review JSON for the page you are currently inspecting
+- **复制全部页面结果** — copies the review JSON for all pages at once
+
+## The review loop
+
+<Steps>
+  <Step title="Skill opens the review shell">
+    After generation (and after candidate selection if applicable), the skill assembles `assets/review_shell/index.html` with all slide images and immediately attempts to open it. If automatic opening fails, it explains the blocker and provides the file path as a fallback.
+  </Step>
+  <Step title="You inspect slides">
+    Browse through the slide images in page order. The shell keeps the visual context of each page visible alongside any review controls so you can evaluate the generated output in context.
+  </Step>
+  <Step title="If approved: signal approval">
+    If the current result is satisfactory, say so in the chat. The review stage ends and the skill proceeds to export the final PPT.
+  </Step>
+  <Step title="If not approved: copy feedback JSON">
+    If any pages need changes, click **复制当前页结果** for specific pages or **复制全部页面结果** for a complete review. Then return to the chat input box, paste the copied JSON into the input field, and send it.
+  </Step>
+  <Step title="Skill classifies and retouches">
+    The skill reads the pasted JSON and classifies each feedback item before acting. After retouching, it updates the review HTML and opens it again.
+  </Step>
+  <Step title="Repeat until approved">
+    The same review instruction is repeated after every retouch round. The loop continues until you confirm that the pages are ready for final delivery.
+  </Step>
+  <Step title="Final PPT exported">
+    Once you approve the reviewed pages, the skill exports the final PPT and immediately attempts to open it for you.
+  </Step>
+</Steps>
+
+## How feedback is classified
+
+When you paste review JSON into the chat, the skill classifies each item into one of three categories before deciding how to act:
+
+- **Full-page regeneration** — broad changes to composition, hierarchy, page concept, style intensity, or overall mood. The skill rerenders the page from scratch.
+- **Local image edit** — targeted changes to a specific region, background element, rendered text area, spacing, or emphasis object. The skill uses an available image-editing path from the environment.
+- **Content or blueprint change** — the feedback is actually changing approved content, narrative structure, or page intent rather than only changing the rendered visual. The skill surfaces this distinction explicitly before making any edits.
+
+<Accordion title="Why the classification matters">
+  Applying a local edit tool to a page that needs full-page regeneration produces patchy results. Applying full-page regeneration to a small spacing fix wastes generation budget and introduces unnecessary variation across the deck. The classification step ensures the right tool is used for the right type of change, and it surfaces content-level changes before they quietly alter approved blueprint content.
+</Accordion>
+
+## Critical rules
+
+<Warning>
+  Do not export the final PPT until you explicitly approve the reviewed pages. The review stage is not optional and is not bypassed after first-pass generation — it is a required part of the workflow.
+</Warning>
+
+The skill does not solve review feedback by adding unapproved PPT overlays. If a page looks wrong, the page visual itself is fixed — not patched with editable text boxes, correction boxes, or overlay layers added on top. The only overlays that belong in the final deck are those already defined by the approved blueprint content.
+
+If a requested revision would change approved content rather than only the rendered visual, the skill raises that explicitly before proceeding.
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Preview shell" icon="eye" href="/assets/preview-shell">
+    The style comparison UI used in Stage 2 — the earlier bundled shell in the same design family
+  </Card>
+  <Card title="Candidate picker shell" icon="list-check" href="/assets/candidate-picker-shell">
+    The multi-candidate selection UI used in Stage 4 before the review stage begins
+  </Card>
+  <Card title="Generation and review" icon="image" href="/workflow/generation-and-review">
+    The full Stage 4 and Stage 5 workflow context for generation, candidate selection, and review
+  </Card>
+  <Card title="Spec lock" icon="lock" href="/artifacts/spec-lock">
+    The execution constraint file that governs what the generated pages must deliver before review
+  </Card>
+</CardGroup>

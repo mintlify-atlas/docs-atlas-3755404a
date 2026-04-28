@@ -1,0 +1,119 @@
+---
+title: "Stage 1.25: Pre-style content research and report basis"
+description: "How content_report.md is built before style work begins, what the two research modes produce, and how style-boundary alignment follows the content stage."
+---
+
+Stage 1.25 sits between **需求确认** and the style-boundary alignment step. Its purpose is to build a grounded content basis before any visual direction is proposed. This order is deliberate: preview images that draw from real content — your actual arguments, section logic, and data — are more useful for style evaluation than images built on generic placeholder topics. The content research stage is the default, not an exception.
+
+## What content_report.md is for
+
+`content_report.md` is the upstream content artifact that feeds every later stage. Its role is to give the planning files and preview images a grounded source rather than forcing them to work from a generic topic shell.
+
+Specifically, it provides:
+- A content source for the **首页**, **目录页**, and **正文页** preview images — the cover should reflect your actual thesis framing, not a decorative label; the TOC should reflect your real narrative chain, not a generic chapter list
+- The grounding material for `design_spec.md`, `slide_blueprint.md`, and `spec_lock.md` so those files describe real pages rather than placeholder intent
+- A record of what is confirmed by your materials, what has been inferred, and what is still open — preventing the skill from presenting unsupported precise data as fact
+
+<Note>
+The skill shows you a synthesized judgment by default, not the full raw report. You see the core framing, narrative line, likely section logic, which content seeds can support previews, and which claims are stable vs. still unconfirmed — then the workflow continues. The full `content_report.md` is available if you ask for it.
+</Note>
+
+## When it runs
+
+Content research runs after **需求确认** and before the style-boundary alignment step. It does not run before you confirm the baseline judgment, and it does not run after style proposals have already started.
+
+The only case where this stage compresses significantly is when you have already provided a complete report, paper, project document, experiment record, full outline, or another complete narrative that is already strong enough to support page planning. In that case, the stage switches to extraction-only mode rather than being skipped entirely.
+
+## The two modes
+
+<Tabs>
+  <Tab title="整理但不扩写">
+    **Used when:** You already provided strong, report-like content — a complete paper, a research document, a detailed project narrative, or a fully developed outline.
+
+    In this mode, the skill extracts structure, identifies section candidates and page-content candidates, and organizes what you provided into a usable content basis. It does not expand your content or add material you did not supply.
+
+    The output is still a structured `content_report.md`, but it reflects your existing work rather than adding to it. Inferred items are marked clearly.
+  </Tab>
+  <Tab title="补强并报告化生成">
+    **Used when:** You provided only a topic, thin materials, partial notes, or scattered inputs that are not yet strong enough to support page planning.
+
+    In this mode, the skill builds a small research-style report from your inputs. It identifies the problem background, frames the core objective, develops a narrative body with connected reasoning, proposes section candidates and page-content candidates, and flags visualizable content.
+
+    Inferred items, unconfirmed claims, and open questions are explicitly marked. The skill does not invent precise data, experimental results, citations, rankings, or institutional conclusions without support from your materials.
+  </Tab>
+</Tabs>
+
+<Warning>
+Even if you ask the skill not to expand your content, it still runs this stage in **整理但不扩写** mode rather than skipping it entirely. A content basis is always created before style work begins.
+</Warning>
+
+## What the synthesized judgment shows
+
+Instead of dumping the full content report, the skill first presents a synthesized judgment covering:
+
+- How the topic is being framed
+- The core narrative line running through the deck
+- The likely section logic
+- Which content seeds can support later preview images
+- Which claims are confirmed by your materials vs. which are inferred or still need confirmation
+
+This judgment is what you respond to if you want to correct the framing or supply missing information before style work begins.
+
+## The content report structure
+
+The full `content_report.md` includes these sections:
+
+- **Source status and material status** — what you provided and how complete it is
+- **Problem background / topic framing** — the broader context for the deck
+- **Core problem or core objective** — what the deck needs to establish or argue
+- **Narrative body** — connected reasoning rather than only bullet lists
+- **Section candidates and page-content candidates** — proposed deck structure drawn from the content
+- **Visualizable content candidates** — elements that translate well into slides
+- **Claim status and open questions** — what is confirmed, what is inferred, what is unresolved
+
+<Tip>
+For full template details, see the artifact reference page.
+</Tip>
+
+<Card title="content_report.md reference" icon="file-lines" href="/artifacts/content-report">
+  Template structure, field definitions, and how the report feeds downstream planning files
+</Card>
+
+## Style-boundary alignment
+
+After the synthesized content judgment is presented, the skill runs a short style-boundary alignment step before proposing any visual directions. This step asks exactly three questions:
+
+1. **整体更偏亮色系、暗色系，还是中间态？** — Sets the brightness boundary for later proposals
+2. **你希望这套 PPT 走常规专业路线，还是可以接受明显风格化的设计路线？** — Sets the design approach boundary
+
+   *Helper note shown with this question:* 如果你没有特别偏好，默认选"常规专业路线"就行；只有当你明确想要更强设计感时，再选"明显风格化路线"。
+
+3. **这次想先看几套风格方向预览？** — Sets how many directions will be proposed
+
+   *Helper note shown with this question:* 默认推荐先看 3 套，通常足够比较；如果你只想快速收敛，也可以少一点，如果你想多看一些方向，也可以多一点。
+
+The answers to these three questions act as boundary conditions for the style proposal stage — they do not define the complete style, they constrain the space within which proposals are generated.
+
+<AccordionGroup>
+  <Accordion title="Defaults when answers are unclear or absent">
+    - **Brightness:** Default to a middle brightness tendency unless the deck context strongly suggests bright or dark
+    - **Route:** Default to 常规专业路线 if you express no clear preference
+    - **Preview count:** Default to 3 directions
+  </Accordion>
+  <Accordion title="What this step does not do">
+    The style-boundary alignment step does not expand into a full design questionnaire. It does not expose internal V1–V8 style vector controls. If you allow the stylized route, it does not branch into subtype follow-up questions — that permission carries forward into the proposal stage itself.
+  </Accordion>
+</AccordionGroup>
+
+## What comes next
+
+After the style-boundary alignment answers are collected, the skill moves into Stage 2 — style proposals and preview.
+
+<CardGroup cols={2}>
+  <Card title="Style proposals and preview" icon="images" href="/workflow/style-proposals-and-preview">
+    How style vectors drive proposals and what each proposal card must contain
+  </Card>
+  <Card title="Intake and confirmation" icon="clipboard-list" href="/workflow/intake-and-confirmation">
+    What happens in Stage 1 before content research begins
+  </Card>
+</CardGroup>

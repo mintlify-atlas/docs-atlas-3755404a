@@ -1,0 +1,60 @@
+---
+title: "PPT Image First: image-first slide deck workflow"
+description: "PPT Image First builds content depth and real image previews before locking deck design — avoiding both over-templated and under-developed presentations."
+---
+
+PPT Image First is a workflow skill for AI coding assistants — Codex, Claude Code, and OpenCode — that turns a rough PPT idea into a finished, image-rendered presentation without forcing you through rigid templates or long configuration forms. Most PPT workflows fail in one of two ways: they become too template-driven and produce polished but generic decks, or they stay too structure-light and produce decks that look acceptable but say very little. PPT Image First is built to avoid both by keeping content and visual direction as separate, ordered concerns.
+
+## What makes it different
+
+### Conversation-first, not form-first
+
+The first intake stays light. You describe what the deck is for, who the audience is, and what materials you already have. The skill treats you like a client and itself like the proposing design side — it delivers judgments, directions, and previews for you to react to, rather than presenting a parameter sheet to fill out.
+
+### Image-first throughout
+
+Preview means actual generated preview images by default — not text sketches, ASCII wireframes, or verbal mockups. When you confirm a style direction, the final generation path uses **GPT Image 2** to render complete slide pages and packages them into a PPTX file. This preserves visual consistency and finish across the whole deck.
+
+### Content before styling when materials are thin
+
+After requirement confirmation, the skill inserts a pre-style content research stage unless you already provided a complete report-like narrative. That stage produces a `content_report.md` — a small research-style report, not a short outline — that gives every later preview page and planning file a real content source rather than a generic placeholder structure.
+
+### Preview before lock-in
+
+The skill does not ask you to choose a final style from text descriptions alone. It generates preview sets for the cover page, TOC page, and a body page for each style direction, then shows you those previews together with lightweight proposal cards before asking for any selection.
+
+### Review is part of the workflow
+
+The first generated deck is not treated as final delivery. After first-pass generation, a dedicated review HTML shell lets you inspect every slide, copy structured feedback, and paste it back into the chat to trigger targeted retouches — page-by-page or region-by-region.
+
+## Good fit scenarios
+
+PPT Image First works especially well when:
+
+- you have only a topic or rough notes and need to build real content depth first
+- the visual direction should be chosen from actual preview images, not guessed upfront
+- the final deck needs to stay aligned with an approved preview logic rather than drifting as the build progresses
+
+Common deck types this workflow handles well include:
+
+- **Thesis defense decks** — where content accuracy and institutional grounding matter
+- **Research presentations** — where thin materials need to be expanded and structured before styling
+- **Pitch decks** — where visual finish and narrative clarity are both required
+- **Product introduction decks** — where brand and identity anchors need to show up in the previews from the start
+
+## Explore further
+
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Walk through the full workflow end-to-end and make your first deck
+  </Card>
+  <Card title="Workflow overview" icon="arrows-spin" href="/workflow/overview">
+    See all five stages and three confirmation points at a glance
+  </Card>
+  <Card title="Style system" icon="palette" href="/style-system/vectors">
+    Learn how V1–V8 style vectors drive proposal generation under the hood
+  </Card>
+  <Card title="Planning artifacts" icon="file-lines" href="/artifacts/content-report">
+    Understand the four output files produced across the workflow
+  </Card>
+</CardGroup>

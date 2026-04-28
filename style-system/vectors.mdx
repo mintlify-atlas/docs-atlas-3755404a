@@ -1,0 +1,127 @@
+---
+title: "Style Vectors: The V1–V8 Design Parameter System"
+description: "How eight internal style dimensions are used to derive coherent visual proposals — and which dimensions follow user input versus AI synthesis."
+---
+
+The style vector system is the internal engine that drives visual proposal generation in PPT Image First. Eight parameterized dimensions — V1 through V8 — capture every meaningful axis of deck visual language, from layout structure and material quality to brand constraint level and information density. These vectors are never exposed to the user as raw controls. Instead, the agent uses them to synthesize coherent, named style directions that users can evaluate as visual previews, not parameter tables.
+
+<Note>
+The V1–V8 system is an internal representation. Users interact with style proposals and visual previews — never with vector values directly.
+</Note>
+
+## The eight vectors
+
+<AccordionGroup>
+  <Accordion title="V1 — Layout System">
+    Governs the spatial grammar of each slide: how elements are arranged, how zones are established, and how compositional logic creates hierarchy and flow. This is an AI-proposed dimension — the agent derives layout candidates from the deck's content type, audience expectations, and overall direction identity.
+  </Accordion>
+
+  <Accordion title="V2 — Texture & Material">
+    Defines the surface quality of visual elements: whether they read as matte paper, translucent glass, brushed metal, soft fabric, or clean digital substrate. Material language is a strong identity signal — a consistent material across 首页, 目录页, and 正文页 is one of the primary intra-direction continuity anchors. This is an AI-proposed dimension.
+  </Accordion>
+
+  <Accordion title="V3 — Lighting & Depth">
+    Controls how light behaves in the visual world: ambient versus directional, soft luminous glow versus hard contrast, shallow versus deep spatial layering. Lighting decisions compound with V2 (material) and V4 (palette) to establish whether the deck reads as airy and research-led, cinematic and dramatic, or clean and neutral. This is an AI-proposed dimension.
+  </Accordion>
+
+  <Accordion title="V4 — Color Palette">
+    Defines the dominant color, secondary palette roles, and accent usage. When brand or industry constraints are explicit — a corporate color system, an institutional palette, or a recognized industry convention — V4 becomes user-controlled and the agent designs within those boundaries. When no hard constraint exists, the agent synthesizes a palette that fits the chosen direction.
+  </Accordion>
+
+  <Accordion title="V5 — Containers & Motifs">
+    Specifies how information is framed and how decorative elements reinforce the visual system. V5 follows a strict two-grammar rule based on page role.
+
+    **Cover pages** use visual metaphors — atmospheric imagery, symbolic compositions, thematic illustration — to establish first impression and tone.
+
+    **Body pages** use information containers — panels, cards, dividers, label boxes, data frames — organized into a visual grammar that describes:
+    - how information is organized within each body page
+    - where visual unity comes from across different body page types
+    - how content-heavy pages, diagram pages, and comparison pages all vary while staying inside the same container system
+
+    Body pages are not one fixed layout. They are a grammar that allows the content to determine the form while the container language stays consistent.
+
+    This is an AI-proposed dimension.
+  </Accordion>
+
+  <Accordion title="V6 — Density & Rhythm">
+    Controls how much information appears on a slide and how visual elements are paced — tight and information-dense versus open and breathing. V6 is user-controlled: the agent defaults to a middle-density treatment appropriate to the deck context, but the user's stated preference takes precedence. A research deck for an expert audience may accept high density; a pitch for a general audience typically calls for a lighter rhythm.
+  </Accordion>
+
+  <Accordion title="V7 — Text–Visual Balance">
+    Sets the proportion of text-dominant versus image-dominant page treatment. This is user-controlled and closely tied to the deck's communication strategy. A data-heavy analytical deck may lean text-forward; a brand narrative deck may lean heavily visual. The agent honors this as a hard boundary when the user states a preference, and infers an appropriate balance when no preference is given.
+  </Accordion>
+
+  <Accordion title="V8 — Brand Constraint Level">
+    Defines how tightly the visual system must conform to a pre-existing brand identity. At the constrained end: strict adherence to a defined color system, typography, and element vocabulary. At the open end: the agent has full creative latitude to propose a style direction. This is user-controlled — the level of constraint is a client-side input, not a creative decision the agent makes unilaterally.
+  </Accordion>
+</AccordionGroup>
+
+## Control split
+
+Vectors divide into two groups based on who governs them.
+
+<Tabs>
+  <Tab title="User-controlled">
+    These dimensions follow user intent or hard constraints and are not overridden by agent synthesis:
+
+    | Vector | Dimension | Notes |
+    |--------|-----------|-------|
+    | V6 | Density & Rhythm | User's information-density preference takes precedence |
+    | V7 | Text–Visual Balance | Communication strategy drives this; agent infers when unspecified |
+    | V8 | Brand Constraint Level | The degree of brand fidelity is always a client-side decision |
+    | V4 | Color Palette | User-controlled when brand or industry color constraints are explicit |
+
+    When users do not express a preference for a user-controlled dimension, the agent infers a reasonable default from the deck context and states that inference explicitly.
+  </Tab>
+  <Tab title="AI-proposed">
+    These dimensions are synthesized by the agent into named direction candidates and presented as style proposals — never as raw parameter choices:
+
+    | Vector | Dimension | Notes |
+    |--------|-----------|-------|
+    | V1 | Layout System | Derived from content type and direction identity |
+    | V2 | Texture & Material | Core continuity signal across page roles |
+    | V3 | Lighting & Depth | Compounds with material and palette |
+    | V5 | Containers & Motifs | Two-grammar rule: metaphor on covers, containers on body pages |
+
+    Users never see "select a V1 layout system" or "choose a V3 depth level." They see visual previews of synthesized directions and react to them directly.
+  </Tab>
+</Tabs>
+
+## Intra-direction continuity
+
+Within one style direction, the three preview pages — 首页 (cover), 目录页 (TOC), and 正文页 (body) — must read as one visual family. Continuity comes from a shared visual system built across the vectors:
+
+- the same or clearly related color palette (V4)
+- the same lighting logic and depth behavior (V3)
+- the same material language (V2)
+- the same container language and edge treatment (V5)
+- the same decorative grammar (V5)
+- the same title, label, and emphasis tone
+- the same level of restraint or expressiveness (V8)
+
+**What is allowed to vary** across the three page roles:
+
+- the cover may be more atmospheric and metaphor-driven
+- the TOC page may be more structural
+- the body page may be more informational
+
+**What is not allowed:**
+
+- changing the style language so much that the three pages look like different template families
+- introducing a new material system or illustration language only on one page
+- making the cover futuristic, the TOC editorial, and the body dashboard-heavy unless that transition still clearly belongs to one shared system
+
+<Tip>
+Think of each direction as one deck identity expressed across three page roles — not three separate design attempts. The vectors must stay coherent across all three.
+</Tip>
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Continuity anchor" icon="link" href="/style-system/continuity-anchor">
+    How the confirmed style direction becomes a locked deck identity that all per-slide prompts inherit.
+  </Card>
+  <Card title="Proposal cards" icon="cards-blank" href="/style-system/proposal-cards">
+    The user-facing interface for comparing style directions — lightweight, readable, and preview-first.
+  </Card>
+</CardGroup>

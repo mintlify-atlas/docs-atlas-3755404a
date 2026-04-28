@@ -1,0 +1,158 @@
+---
+title: "Stages 3–5: Planning files, generation, and review"
+description: "How single vs. multi-candidate generation works, what the candidate picker and review shell do, and how the retouch loop runs before final export."
+---
+
+After **生成前确认**, the workflow moves into its final three stages: writing planning files (Stage 3), generating page visuals (Stage 4), and running the review-and-retouch loop (Stage 5). These stages produce the actual rendered slides and end only when you explicitly approve the reviewed pages — not when the first generation pass finishes.
+
+## Stage 3 — Planning files
+
+Before the first full generation pass, the skill has already written three planning artifacts after style inversion confirmation:
+
+1. **`design_spec.md`** — global deck rationale and visual system
+2. **`slide_blueprint.md`** — page-by-page content and layout intent
+3. **`spec_lock.md`** — execution constraints that must not drift during generation
+
+Every slide prompt in Stage 4 inherits the deck-level continuity anchor from these files before adding any page-role or content-specific variation. Slide prompts are not written as independent style descriptions.
+
+<CardGroup cols={2}>
+  <Card title="slide_blueprint.md" icon="file-lines" href="/artifacts/slide-blueprint">
+    Page-by-page intent: one entry per slide with approved content and layout direction
+  </Card>
+  <Card title="spec_lock.md" icon="lock" href="/artifacts/spec-lock">
+    Execution constraints: what is locked and cannot drift during generation
+  </Card>
+</CardGroup>
+
+## Stage 4 — Generation
+
+Before the first full generation pass begins, the skill asks one short branch question:
+
+> **最终页这次是每页先出 1 张直接进评审，还是每页先出多张候选再挑？**
+
+Your answer determines which path the generation stage takes.
+
+<Tabs>
+  <Tab title="Single-candidate path">
+    **When to use:** You want to move quickly into review without a selection step.
+
+    The skill generates one final image per slide using the approved page prompt for that slide. All visuals use **16:9** ratio.
+
+    After the full set of page visuals is ready, the skill moves directly into the review HTML stage — the candidate-picker shell is not used.
+
+    If you give no clear preference on the branch question, the skill defaults to this path.
+  </Tab>
+  <Tab title="Multi-candidate path">
+    **When to use:** You want to see multiple options per slide before committing to one for review.
+
+    When you choose this path, the skill also asks how many candidates per slide you want.
+
+    For each slide, the skill generates the requested number of candidates using the same approved page prompt — variations stay inside the one approved direction for that page, not different style proposals.
+
+    After generation, the skill:
+
+    1. Assembles the bundled `assets/candidate_picker_shell/index.html`
+    2. Immediately attempts to open it for you
+    3. Tells you to finish the selection in the page and click **复制全部编号**
+    4. Instructs you concretely: return to the chat input box, paste the copied codes into the input field, and send them
+
+    The skill waits for the returned selection codes before entering the review stage. Once the codes arrive, it maps them to the selected page images and uses that chosen set as the review input.
+
+    <Warning>
+    Do not skip the candidate selection step if you chose the multi-candidate path. The skill will not enter the review HTML stage until the chosen codes are returned.
+    </Warning>
+  </Tab>
+</Tabs>
+
+### The image-first rule
+
+Generation in this skill is image-first. That means:
+
+- When image generation is available, the skill uses an available image-generation toolchain from the environment — a tool, MCP server, or skill — to produce page visuals
+- The skill does not silently fall back to a traditional shape-by-shape PPT workflow when image generation is available
+- Generated page visuals are treated as complete outputs by default, not as background plates for a second design pass
+- Post-generation overlays default to zero — the skill does not add its own titles, metrics, bullets, labels, callouts, or decorative elements on top of generated images unless those additions are already grounded in the confirmed slide content and traceable to approved blueprint fields
+
+If image-generation constraints force a tradeoff, the skill will tell you explicitly before changing strategy.
+
+<Card title="Candidate picker shell" icon="window" href="/assets/candidate-picker-shell">
+  How the bundled candidate_picker_shell/index.html works and how to return selection codes
+</Card>
+
+## Stage 5 — Review and retouch
+
+After the first full set of page visuals is ready — either from the single-candidate path or after candidate selection — the skill enters the review-and-retouch loop.
+
+### The review shell
+
+The skill assembles the bundled `assets/review_shell/index.html` and immediately attempts to open it for you. This shell is the main review surface, not the live PPT file.
+
+The review HTML:
+- Shows every generated slide image in page order
+- Keeps page context visible alongside any review comments
+- Supports per-page review feedback
+- When the environment supports it, prefers visual annotations such as brush marks, boxes, and arrows in addition to text comments
+
+The skill does not create a replacement review shell or a lookalike HTML page — it uses the bundled shell.
+
+<Card title="Review shell" icon="window" href="/assets/review-shell">
+  How the bundled review_shell/index.html is structured and how to use the copy buttons
+</Card>
+
+### What the skill tells you when the review shell opens
+
+When presenting the review stage, the skill explicitly tells you:
+
+- If the current result is satisfactory, you can say it is approved and the review stage ends
+- If the current result is not satisfactory, use the review page's **复制当前页结果** or **复制全部页面结果** button
+- After clicking copy, return to the chat input box, paste the copied JSON into the input field, and send it
+
+The instruction is concrete — not just "paste the JSON," but a specific sequence of actions.
+
+### Classifying review feedback
+
+When you give feedback, the skill classifies it into one of three categories before acting:
+
+| Category | When it applies | Default action |
+|---|---|---|
+| **Full-page regeneration** | Broader changes to composition, hierarchy, page concept, style intensity, or overall mood | Regenerate the full page with an updated prompt |
+| **Local image edit** | Targeted changes to a specific region, background element, rendered text area, spacing, or emphasis object | Use an available image-editing path from the environment |
+| **Content/blueprint change** | The user is changing approved content, narrative structure, or page intent — not just the rendered visual | Surface explicitly before editing, because this changes locked planning files |
+
+<Note>
+The skill does not solve review feedback by adding unapproved PPT overlays. The default fix is to update the page visual itself. The PPT file is not used as the fast-turnaround retouch surface unless you explicitly ask for that workflow.
+</Note>
+
+### The retouch loop
+
+<Steps>
+  <Step title="Give feedback">
+    Either approve the current result, or use the copy button in the review shell and paste the copied JSON back into the chat input.
+  </Step>
+  <Step title="Skill classifies and acts">
+    The skill classifies your feedback, runs a full-page regeneration or local image edit as appropriate, and updates the affected slides.
+  </Step>
+  <Step title="Review shell refreshes">
+    After each retouch round, the skill updates the review HTML and opens it again with the same approval instruction. The loop repeats until you approve.
+  </Step>
+  <Step title="Explicit approval">
+    You tell the skill the pages are ready. Only at this point does the skill export the final PPTX and immediately attempt to open it for you.
+  </Step>
+</Steps>
+
+<Warning>
+The skill does not export the final PPT immediately after the first-pass generation. Export happens only after you explicitly confirm that the reviewed pages are satisfactory.
+</Warning>
+
+## What comes next
+
+Once you approve the reviewed pages, the workflow ends with the final PPTX exported and opened. If you want to understand the planning artifacts that supported generation, the references below cover each file.
+
+<CardGroup cols={2}>
+  <Card title="Workflow overview" icon="arrows-spin" href="/workflow/overview">
+    See all five stages and three confirmation points at a glance
+  </Card>
+  <Card title="Planning artifacts" icon="file-lines" href="/artifacts/content-report">
+    The four output files — content report, design spec, slide blueprint, and spec lock
+  </Card>
+</CardGroup>

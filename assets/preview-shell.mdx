@@ -1,0 +1,78 @@
+---
+title: "Preview Shell: style direction comparison UI"
+description: "The bundled HTML shell that presents style proposal cards alongside generated preview images so you can compare visual directions before locking a design."
+---
+
+The preview shell is a self-contained HTML file at `assets/preview_shell/index.html` that serves as the required visual interface for Stage 2 of the PPT Image First workflow. After style directions are derived and their preview images are generated, the skill populates this shell with the proposal cards and images, then immediately attempts to open it locally so you can compare every direction at a glance — without navigating raw files yourself.
+
+## What it displays
+
+For each style direction, the shell renders two elements side-by-side:
+
+- **A lightweight proposal card** — name, one-line positioning, cover direction, body-page visual grammar, suitable scenarios, and a risk note
+- **Three generated preview images** — 首页 (cover), 目录页 (TOC), and 正文页 (body page), produced at a 16:9 slide ratio
+
+The three-page preview set is fixed. Every direction always produces exactly these three page types so you can compare directions fairly: the cover checks first impression and visual tone, the TOC page checks structural capability, and the body page checks whether the style can actually carry real information.
+
+## When it is used
+
+The preview shell is opened at the end of Stage 2, after style proposals are derived from the content basis and each direction's preview images are generated. It remains in use through any style refinement rounds: each round regenerates the same 首页/目录页/正文页 set and repopulates the shell.
+
+<Steps>
+  <Step title="Style proposals derived">
+    The skill derives the requested number of style directions from the content basis and style-boundary answers. Each direction is expressed as a lightweight proposal card.
+  </Step>
+  <Step title="Preview images generated">
+    For each direction, exactly three preview images are generated at 16:9: 首页, 目录页, and 正文页. Preview content draws from `content_report.md` — cover from the content thesis, TOC from the narrative chain, body page from section and page candidates.
+  </Step>
+  <Step title="Shell populated">
+    The proposal cards and preview images are inserted into the data slots of `assets/preview_shell/index.html`. The companion script `build_preview_html.py` assists with this step.
+  </Step>
+  <Step title="Shell opened">
+    The skill immediately attempts to open the local HTML file so you can review all directions in one view. If automatic opening fails, the skill explains the blocker and provides the file path as a fallback.
+  </Step>
+  <Step title="Style confirmed or refined">
+    After reviewing the shell, you either confirm a final direction or request a refinement round. Refinement reruns from Step 2 with the adjusted directions.
+  </Step>
+</Steps>
+
+## Content rules for preview images
+
+Preview images must be content-bearing enough to evaluate. Placeholder text, blank title fields, empty dashboard shells, and decorative-only layouts are not acceptable outputs at this stage.
+
+When `content_report.md` exists, the preview content must draw from it directly:
+
+- The **cover** reflects the content thesis or core framing, not only a decorative topic shell
+- The **TOC page** reflects the narrative chain or section candidates, not a generic chapter list
+- The **body page** uses page-content candidates, visualizable content, or report-derived arguments rather than generic filler structure
+
+If part of the preview content is inferred rather than user-provided, it stays general and avoids unsupported precise claims.
+
+<Accordion title="Helper script: build_preview_html.py">
+  The `assets/preview_shell/` directory includes `build_preview_html.py` alongside `index.html`. This script assists with filling the shell's data slots programmatically — inserting proposal card text and embedding the generated preview images into the correct positions in the HTML. Consult it when automating the population step.
+</Accordion>
+
+## Opening behavior
+
+After the shell is filled, the skill treats opening it as a required step in the preview workflow, not an optional convenience. It immediately attempts to open the local HTML file using an environment-appropriate command. If that attempt fails, it says so explicitly, describes the blocker, and provides the file path so you can open it yourself.
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Candidate picker shell" icon="list-check" href="/assets/candidate-picker-shell">
+    The multi-candidate selection UI used in Stage 4 when you choose to generate multiple candidates per slide
+  </Card>
+  <Card title="Review shell" icon="magnifying-glass" href="/assets/review-shell">
+    The final review and retouch UI used in Stage 5 after the first full set of page visuals is generated
+  </Card>
+  <Card title="Style proposals and preview" icon="palette" href="/workflow/style-proposals-and-preview">
+    The full Stage 2 workflow that drives preview shell usage
+  </Card>
+  <Card title="Style vectors" icon="sliders" href="/style-system/vectors">
+    How V1–V8 style vectors are used internally to derive the proposal cards shown in the shell
+  </Card>
+</CardGroup>
+
+<Note>
+  The preview shell is a mandatory workflow asset. Do not replace it with a custom-built alternative, a lookalike page, or a fresh preview interface even if building one feels easier. The only valid reasons to depart from the bundled shell are that the file is genuinely unavailable or you explicitly request a different interface — and in either case, the skill says so clearly rather than silently substituting.
+</Note>

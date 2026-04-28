@@ -1,0 +1,113 @@
+---
+title: "Stage 2: Style proposals, preview images, and 风格确认"
+description: "How proposal cards are structured, what the fixed 3-page preview set tests, and how the bundled preview shell displays style directions for comparison."
+---
+
+Stage 2 turns the style-boundary alignment answers into concrete visual directions you can actually evaluate. Instead of asking you to choose from abstract descriptions, the skill proposes a set of lightweight cards and generates real preview images for each direction — then opens the bundled `preview_shell/index.html` so you can compare them side by side. Style selection is preview-first by design; you never finalize a direction based on text alone.
+
+## How style vectors work internally
+
+Style vectors (V1–V8) are the skill's internal mechanism for translating boundary conditions into concrete visual specifications. You never interact with them directly — the skill uses the answers from the style-boundary alignment step as inputs, applies the vectors internally, and surfaces the results as readable proposal cards.
+
+This separation matters because raw vector parameters are not useful for comparison. What you need to evaluate is the rendered result, not the configuration that produced it. The proposal card is the user-facing interface; it must stay readable and comparable across directions.
+
+<Card title="Style system vectors" icon="sliders" href="/style-system/vectors">
+  How V1–V8 style vectors map to visual attributes and drive proposal generation
+</Card>
+
+## What each proposal card contains
+
+Every proposal must include all six of these fields:
+
+| Field | What it describes |
+|---|---|
+| **Proposal name** | A short, memorable label for the direction |
+| **One-line positioning** | The single sentence that captures this direction's identity |
+| **Cover direction** | What the 首页 communicates and how it is composed visually |
+| **Body-page visual grammar** | How information is structured and presented on content slides |
+| **Suitable scenarios** | The deck types and audiences this direction works well for |
+| **Risk note** | Where this direction might underperform or require care |
+
+These cards are shown together with the preview images, not before them. The goal is evaluation, not selection from a menu.
+
+## The fixed 3-page preview set
+
+Each style direction generates exactly three preview pages. These three page types are fixed because they test different things:
+
+<Steps>
+  <Step title="首页 — cover page">
+    Tests first impression, main visual composition, tone, and metaphor. Confirms that the opening frame matches the deck's purpose and identity anchors. The cover may be lighter in information density, but it should not contain placeholder copy.
+  </Step>
+  <Step title="目录页 — table of contents page">
+    Tests structural capability and hierarchy. Checks whether the style can support a system page and how the deck transitions from cover into content. The TOC should show believable section titles drawn from the narrative chain in `content_report.md`, not a generic chapter list.
+  </Step>
+  <Step title="正文页 — body content page">
+    Tests whether the style can carry real information. Checks readability, emphasis, and whether the visual grammar survives actual content — headings, bullets, labels, cards, numbers, or relational structures with enough density to judge usability.
+  </Step>
+</Steps>
+
+<Warning>
+A valid preview page must contain plausible filled content. The skill does not generate placeholder text ("在此输入...", "title here", "lorem ipsum"), large empty containers, or blank dashboard shells as preview outputs. If the preview looks like a shell waiting to be filled, it does not count as a preview in this workflow.
+</Warning>
+
+### Content-bearing previews
+
+If `content_report.md` or another content basis exists, preview images draw from it directly:
+
+- The cover should reflect the content thesis or core framing — not just a decorative topic label
+- The TOC page should reflect the narrative chain or section candidates from the report
+- The body page should use page-content candidates and visualizable content from the report rather than generic filler structure
+
+Do not interpret the preview stage as a separate content-creation step. The content basis from Stage 1.25 is the source.
+
+## Real images, not text mockups
+
+All preview images are generated as actual images at **16:9** ratio by default. Text sketches, ASCII boxes, pseudo-layouts, and verbal examples do not count as previews in this workflow.
+
+If image generation is unavailable in the current environment, the skill will say so explicitly and explain what is blocking it — it will not silently downgrade to text mockups or imply that text-only selection is the normal path.
+
+## The bundled preview shell
+
+The preview stage uses the bundled shell at `assets/preview_shell/index.html`. This is the required workflow UI — the skill does not create a replacement shell, a lookalike HTML page, or a fresh preview interface.
+
+For each style direction, the shell shows:
+- The proposal card text (name, positioning, cover direction, body grammar, suitable scenarios, risk note)
+- The three preview images (首页, 目录页, 正文页) displayed beside or under the card
+
+After filling the shell with proposal cards and preview images, the skill immediately attempts to open that local page for you. Opening the preview is part of the workflow, not an optional follow-up. If automatic opening fails, the skill will explain the blocker and give you the file path as a fallback.
+
+<Card title="Preview shell" icon="window" href="/assets/preview-shell">
+  How the bundled preview_shell/index.html is structured and how it is populated
+</Card>
+
+## The speed and QA rule
+
+The preview stage is a directional comparison step, not a polishing pass. Once the image-generation path is confirmed, the skill generates the full preview set with minimal intermediate checking. It does not regenerate pages to slightly improve one candidate unless the result is clearly broken, unreadable, or off-direction.
+
+The goal at this stage is:
+- **Speed** — get a comparable set in front of you quickly
+- **Comparability** — all directions use the same three page types so you can compare fairly
+- **Directionality** — previews are good enough to evaluate direction, not final-production quality
+
+This same rule applies during refinement rounds.
+
+## Confirmation point 2 — 风格确认
+
+After you have seen the preview set, the skill stops at the second mandatory confirmation point. You can:
+
+- Choose one direction as the final style
+- Mix elements from multiple directions
+- Ask for a refinement round (see [Style refinement and lock](/workflow/style-refinement-and-lock))
+
+The skill does not assume that the next step is immediately choosing a final direction. Refinement rounds are a normal and expected part of the workflow before **风格确认** is reached.
+
+## What comes next
+
+<CardGroup cols={2}>
+  <Card title="Style refinement and lock" icon="sliders" href="/workflow/style-refinement-and-lock">
+    Refinement rounds, style inversion confirmation, and writing the planning files
+  </Card>
+  <Card title="Style system proposal cards" icon="cards" href="/style-system/proposal-cards">
+    Full reference for proposal card fields and how they are constructed
+  </Card>
+</CardGroup>

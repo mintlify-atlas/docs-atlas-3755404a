@@ -1,0 +1,88 @@
+{
+  "projectType": "general",
+  "projectName": "PPT Image First",
+  "projectDescription": "A conversation-first, image-first PPT workflow skill for AI coding assistants (Codex, Claude Code, OpenCode) that guides users from a vague deck request through content research, real visual previews, style refinement, and final image-rendered PPTX delivery.",
+  "theme": "palm",
+  "primaryColor": "#f4e2b6",
+  "lightColor": "#7c7c80",
+  "darkColor": "#1f1f20",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "quickstart",
+              "installation"
+            ]
+          },
+          {
+            "group": "Workflow",
+            "pages": [
+              "workflow/overview",
+              "workflow/intake-and-confirmation",
+              "workflow/content-research",
+              "workflow/style-proposals-and-preview",
+              "workflow/style-refinement-and-lock",
+              "workflow/generation-and-review"
+            ]
+          },
+          {
+            "group": "Planning Artifacts",
+            "pages": [
+              "artifacts/content-report",
+              "artifacts/design-spec",
+              "artifacts/slide-blueprint",
+              "artifacts/spec-lock"
+            ]
+          },
+          {
+            "group": "Style System",
+            "pages": [
+              "style-system/vectors",
+              "style-system/continuity-anchor",
+              "style-system/proposal-cards"
+            ]
+          },
+          {
+            "group": "Bundled Assets",
+            "pages": [
+              "assets/preview-shell",
+              "assets/candidate-picker-shell",
+              "assets/review-shell"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Conversation-first intake that avoids long questionnaires",
+    "Pre-style content research stage that produces a content_report.md as grounding material",
+    "Real image-based style preview generation (not text mockups or wireframes)",
+    "Multi-direction style proposal with 首页/目录页/正文页 (cover/TOC/body) previews for each direction",
+    "Iterative style refinement rounds before locking direction",
+    "Style inversion confirmation to extract stable visual facts from chosen previews",
+    "Deck-level continuity anchor ensuring visual consistency across all slides",
+    "Multi-candidate final generation with bundled candidate-picker HTML shell",
+    "Structured review-and-retouch loop via bundled review HTML shell",
+    "Image-first final output: GPT Image 2 renders full slide pages packaged into PPTX"
+  ],
+  "publicApiSurface": [
+    "SKILL.md — skill entry point and working principles for Codex/Claude Code/OpenCode",
+    "references/workflow.md — stage-by-stage process with 3 confirmation points",
+    "references/conversation_framework.md — conversation-first intake pattern",
+    "references/style-system.md — V1-V8 style vectors and proposal rules",
+    "references/preview-flow.md — preview generation and shell usage rules",
+    "templates/content_report_reference.md — template for content_report.md",
+    "templates/design_spec_reference.md — template for design_spec.md",
+    "templates/slide_blueprint_reference.md — template for slide_blueprint.md",
+    "templates/spec_lock_reference.md — template for spec_lock.md",
+    "assets/preview_shell/index.html — bundled style preview UI shell",
+    "assets/candidate_picker_shell/index.html — bundled candidate selection UI shell",
+    "assets/review_shell/index.html — bundled review-and-retouch UI shell"
+  ]
+}

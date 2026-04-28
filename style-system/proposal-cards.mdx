@@ -1,0 +1,122 @@
+---
+title: "Style Proposal Cards: Format and Interaction Model"
+description: "How style directions are packaged as lightweight, comparable direction cards and how users move from proposals to previews to a confirmed deck identity."
+---
+
+Style proposals are the user-facing output of the V1–V8 vector system. Rather than exposing raw parameters, the agent synthesizes each direction into a proposal card — a lightweight, readable format that gives the user everything they need to compare directions and react to visual previews. The proposal card is a presentation interface, not a creative constraint; it does not restrict what the agent generates for previews.
+
+## The proposal card format
+
+Each style proposal card contains exactly six fields:
+
+| Field | Purpose |
+|-------|---------|
+| **Proposal name** | A short, memorable label for the direction |
+| **One-line positioning** | A single sentence that captures the visual identity and intended audience impression |
+| **Cover direction** | How the cover page (首页) expresses the direction — the visual metaphor, composition, and first-impression tone |
+| **Body-page visual grammar** | How information is organized across body pages — the container system, emphasis logic, and how different body page types stay inside one shared system |
+| **Suitable scenarios** | The deck types, audiences, and contexts this direction fits well |
+| **Risk note** | Where this direction is likely to fail or require extra care |
+
+<Note>
+Proposal cards are presented as direction descriptions, not as tables of V1–V8 values. Users never see the internal vector parameters.
+</Note>
+
+## Before proposals: style-boundary alignment
+
+Before generating style proposals, the agent runs a short **style-boundary alignment** step — three focused questions that set the outer boundaries of the proposal space without turning into a full style interview:
+
+1. **整体更偏亮色系、暗色系，还是中间态？**
+   *(Is the overall direction brighter, darker, or in between?)*
+
+2. **你希望这套 PPT 走常规专业路线，还是可以接受明显风格化的设计路线？**
+   *(Should this deck follow a conventional professional route, or is a strongly stylized design route acceptable?)*
+
+   > 如果你没有特别偏好，默认选"常规专业路线"就行；只有当你明确想要更强设计感时，再选"明显风格化路线"。
+   > *(If you have no strong preference, the default is the conventional professional route. Only choose the stylized route when you specifically want stronger design expression.)*
+
+3. **这次想先看几套风格方向预览？**
+   *(How many style directions do you want to preview?)*
+
+   > 默认推荐先看 3 套，通常足够比较；如果你只想快速收敛，也可以少一点，如果你想多看一些方向，也可以多一点。
+   > *(The default recommendation is 3 directions — usually enough for a fair comparison. Fewer if you want to converge quickly; more if you want a wider exploration.)*
+
+### Default values when answers are absent or ambiguous
+
+| Question | Default |
+|----------|---------|
+| Brightness | Middle brightness tendency, unless the deck context strongly indicates bright or dark |
+| Route | 常规专业路线 (conventional professional route) |
+| Preview count | 3 directions |
+
+The alignment step stays short. It does not become a longer style interview. If the user permits the stylized route, the agent carries that permission into the proposal stage without asking subtype follow-up questions.
+
+## From proposals to previews
+
+Style selection is always preview-first. The workflow sequence is:
+
+1. The agent derives style proposals using the V1–V8 system internally
+2. Proposals are presented as direction cards — not as parameter tables
+3. **Real visual previews are generated** for each direction (三张预览页: 首页, 目录页, 正文页)
+4. The user reacts to the previews — they do not fill in style parameters or make a text-only choice
+
+<Tip>
+Users should never be left with the impression that style selection is a text-only process. If real image previews are not yet available, that must be stated explicitly — not silently replaced with text sketches or ASCII mockups.
+</Tip>
+
+Each direction's preview set is presented alongside its proposal card in the bundled preview shell, so the user can compare visual outputs directly rather than comparing descriptions.
+
+## User-controlled inputs vs. AI-synthesized internals
+
+The proposal system distinguishes between what the user governs and what the agent synthesizes:
+
+**User-controlled style-boundary inputs** (from the alignment questions):
+- Overall brightness tendency (V4 palette bias, V3 lighting world)
+- Route permission: conventional professional vs. stylized
+- Number of directions to preview
+
+**AI-synthesized proposal internals** (never exposed to the user):
+- Layout system (V1)
+- Texture and material language (V2)
+- Lighting and depth model (V3)
+- Container grammar and visual motifs (V5)
+- The coherent combination of all vectors into a named direction
+
+The agent uses user inputs as boundaries and synthesizes everything inside those boundaries. Users react to results — they do not configure parameters.
+
+## Refinement after previews
+
+After previews are shown, the user reacts. They do not fill in a form or choose from a menu. The interaction model accepts natural feedback:
+
+- pick one direction as the base
+- request specific changes: more contrast, more restraint, different palette weight, lighter information density
+- mix elements from different directions
+
+When a user wants to refine rather than confirm, the agent:
+
+1. Treats one current direction as the base
+2. Runs a short **风格反演确认** (style inversion confirmation) on that base — reading what the actual preview images expressed, not just what the prompt originally asked for
+3. Derives the requested number of refined variations from that confirmed base (default: 3 if unspecified)
+4. Keeps variations inside the same broad identity unless the user clearly asks for a larger pivot
+
+During refinement, the agent proactively offers lightweight tweak cues to help users articulate reactions more easily — for example: 对比度高一点, 更克制一点, 信息感更强一点, 画面更轻一点. Users are not required to use these phrases; they are prompts for natural feedback.
+
+### Two paths at the end of a refinement round
+
+When closing a refinement message, the agent always states both available paths explicitly:
+
+- **Continue refining:** generate more variations along a given sub-direction
+- **End style stage:** lock the current direction and proceed to planning
+
+The message never implies that the only available response is to pick one direction and generate the final deck immediately.
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Style vectors" icon="sliders" href="/style-system/vectors">
+    The internal V1–V8 system that proposal synthesis is built on.
+  </Card>
+  <Card title="Continuity anchor" icon="link" href="/style-system/continuity-anchor">
+    How the confirmed proposal becomes a locked deck identity after style inversion confirmation.
+  </Card>
+</CardGroup>

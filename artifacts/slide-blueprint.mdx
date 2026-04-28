@@ -1,0 +1,125 @@
+---
+title: "Slide Blueprint: Page-by-Page Intent and Content Binding"
+description: "How slide_blueprint.md defines each slide's content source, claim status, visual strategy, and continuity inheritance before generation begins."
+---
+
+`slide_blueprint.md` is the page-by-page intent file that bridges confirmed content and confirmed style into concrete per-slide instructions. It is not a full design draft, and it is not a plain outline — it is a structured record of what each slide must say, where that content comes from, how the slide sits inside the confirmed style world, and what a generation pass is allowed to produce. Every downstream decision — including which overlays, if any, may appear in final assembly — must trace back to an explicit field in this file.
+
+## When it's written
+
+`slide_blueprint.md` is written after the style direction is confirmed and after `design_spec.md` is complete. It must not be started while style refinement is still active.
+
+<Steps>
+  <Step title="Style confirmed and design_spec.md written">
+    The continuity anchor and narrative spine are fixed. The slide blueprint can now reference them rather than reconstructing style decisions independently.
+  </Step>
+  <Step title="Slide list derived from content_report.md">
+    If `content_report.md` exists, the slide list traces back to its Section Candidates and Page Content Candidates. A generic deck outline is not invented from scratch.
+  </Step>
+  <Step title="Each slide entry is populated">
+    All twelve fields of the minimal schema are filled for every slide.
+  </Step>
+  <Step title="spec_lock.md follows">
+    The spec lock can now reference the blueprint's overlay decisions and claim statuses to encode what must not drift during generation.
+  </Step>
+</Steps>
+
+## Minimal schema per slide
+
+Every slide entry in the blueprint must include all twelve fields:
+
+| Field | What it records |
+|---|---|
+| `slide_id` | Unique identifier for the slide (e.g., `S01`, `S03`) |
+| `page_role` | The function of this slide (e.g., `cover`, `toc`, `logic`, `data`, `conclusion`) |
+| `title` | The slide's working title |
+| `core_message` | The single core assertion this slide must communicate |
+| `content_payload` | The specific content elements this slide carries |
+| `content_basis_binding` | Which section of `content_report.md` or equivalent content basis this slide derives from |
+| `claim_status` | Whether the core assertion is `user_provided`, `inferred`, `needs_confirmation`, or a mix |
+| `page_rhythm` | The structural rhythm of the page (e.g., `structured`, `flowing`, `sparse`) |
+| `text_visual_balance` | The intended balance between text and visual elements (e.g., `text-heavy`, `balanced`, `visual-heavy`) |
+| `visual_strategy` | How the page should organize and present its visual content |
+| `continuity_inheritance` | How this page stays inside the confirmed deck-level continuity anchor |
+| `preview_evidence_binding` | Which reverse-engineered preview facts or user-confirmed elements this page inherits, reinterprets locally, or intentionally does not carry over |
+
+## Real example: S03 entry
+
+The following entry is taken directly from the template. It shows a logic page with mixed claim status and concrete continuity inheritance:
+
+```md
+## S03
+- page_role: logic
+- title: Why this approach is necessary
+- core_message: The main issue is not a single defect but the lack of a unified design logic.
+- content_payload: current problems + cause breakdown + one conclusion
+- content_basis_binding: derive from `content_report.md` narrative body section on current problems and problem-chain analysis
+- claim_status: mixed; problem framing is inferred from the synthesized content basis and should avoid unsupported precise numbers unless the user provided them
+- page_rhythm: structured
+- text_visual_balance: balanced
+- visual_strategy: structured grouping with clear hierarchy
+- continuity_inheritance: keep bright scientific-board background tendency, inherit light panel container grammar, use deep-blue for structure and cyan-blue only for key data emphasis, do not shift into dark HUD mood
+- preview_evidence_binding: inherit the user-confirmed cloud-and-atmosphere semantic field, keep academic answer-defense tone, keep school-context anchor visible in a way suitable for this page role, do not force the cover-only skyline composition onto an inner logic page
+```
+
+Notice several things in this example:
+
+- `content_basis_binding` names a specific section of `content_report.md`, not just "the content report"
+- `claim_status` explains _why_ the status is mixed and what constraint that places on copy
+- `continuity_inheritance` names specific properties from the continuity anchor by field (background tendency, container grammar, palette role usage) rather than using vague phrases
+- `preview_evidence_binding` distinguishes what is inherited deck-wide from what is cover-only
+
+## Key rules
+
+**On continuity_inheritance:**
+
+<Warning>
+  Do not write empty phrases such as "keep the style consistent." The `continuity_inheritance` field must name the specific inherited constraints: brightness/background tendency, palette role usage, container grammar, and emphasis tone at minimum.
+</Warning>
+
+**On overlays:**
+
+Any editable overlay that may appear in final assembly must be traceable to an explicit field in the slide entry. If no overlay need is described in the blueprint, the default assembly behavior is **zero post-generation overlays**.
+
+**On content sourcing:**
+
+If `content_report.md` exists, the slide list must trace back to it. The blueprint must not invent a separate generic deck outline that ignores the content basis.
+
+**On claim status:**
+
+Every slide's `claim_status` must state whether the core assertion is `user_provided`, `inferred`, `needs_confirmation`, or a mix. This field propagates into `spec_lock.md`'s `content_grounding` section.
+
+**On scope:**
+
+The blueprint must not contain:
+- Exact color values
+- Prompt strings
+- Pixel-level layout instructions
+
+It should be lighter than a full design draft but stronger than a plain outline.
+
+<AccordionGroup>
+  <Accordion title="Tracing overlays back to blueprint fields">
+    If a final assembly needs an editable title overlay, that overlay's content must be traceable to the `title` and `core_message` fields of the corresponding slide entry. If it needs a data label overlay, that must trace back to the `content_payload` field. Nothing may be invented during generation without a blueprint source.
+
+    This rule exists because post-generation overlays that are invented rather than planned tend to redesign the slide after the fact, which conflicts with the image-first generation philosophy of the workflow.
+  </Accordion>
+  <Accordion title="How page variation is handled">
+    Not every slide must look identical. The `allowed_variation` range in the design spec's continuity anchor defines where slides may move relative to the base. The `continuity_inheritance` field in each blueprint entry is where that variation is applied per slide: a cover may be more atmospheric, a data-heavy page may deepen contrast slightly, but a full dark-background slide remains forbidden if the anchor prohibits it.
+  </Accordion>
+</AccordionGroup>
+
+<CardGroup cols={2}>
+  <Card title="Content Report" icon="file-text" href="/artifacts/content-report">
+    Understand the content basis that every content_basis_binding field should reference.
+  </Card>
+  <Card title="Design Spec" icon="pencil-ruler" href="/artifacts/design-spec">
+    See the continuity anchor that every continuity_inheritance field inherits from.
+  </Card>
+  <Card title="Spec Lock" icon="lock" href="/artifacts/spec-lock">
+    See how blueprint claim statuses and overlay decisions feed into spec_lock.md.
+  </Card>
+  <Card title="Generation and review" icon="play" href="/workflow/generation-and-review">
+    See how the blueprint governs the generation pass and the review stage.
+  </Card>
+</CardGroup>
